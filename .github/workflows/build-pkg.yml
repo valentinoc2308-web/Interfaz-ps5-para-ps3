@@ -1,6 +1,12 @@
 name: Build PKG
+
 on:
   workflow_dispatch:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
 
 jobs:
   pkg:
@@ -9,54 +15,121 @@ jobs:
       PS3DEV: /usr/local/ps3dev
       PSL1GHT: /usr/local/ps3dev
     steps:
-      - uses: actions/checkout@v4
+      - name: Descargar el repositorio
+        uses: actions/checkout@v4
 
-      - name: Descomprimir el proyecto
-        run: unzip -q ./*.zip
+      - name: Descomprimir y validar el proyecto
+        run: |
+          set -euo pipefail
+          ZIP="nova-launcher-ps3-src (1).zip"
+          test -s "$ZIP"
+          unzip -q "$ZIP" -d .
+          test -f nova-launcher/Makefile
+          test -f nova-launcher/host/run_tests.sh
+          echo "Proyecto encontrado:"
+          find nova-launcher -maxdepth 2 -type f | sort | head -60
 
-      - name: Dependencias
+      - name: Ejecutar pruebas del launcher en PC
+        working-directory: nova-launcher
+        run: bash host/run_tests.sh
+
+      - name: Instalar dependencias
         run: |
           sudo apt-get update
-          sudo apt-get install -y autoconf automake bison flex gcc g++ make libelf-dev texinfo \
-            libncurses5-dev patch python3 python-is-python3 subversion wget zlib1g-dev libtool-bin \
-            python3-dev bzip2 libgmp3-dev pkg-config libssl-dev git
+          sudo apt-get install -y \
+            autoconf automake bison flex gcc g++ make libelf-dev texinfo \
+            libncurses5-dev patch python3 python-is-python3 subversion wget \
+            zlib1g-dev libtool-bin python3-dev bzip2 libgmp3-dev pkg-config \
+            libssl-dev git clang
 
-      - name: Agregar la toolchain al PATH
-        run: |
-          echo "$PS3DEV/bin" >> $GITHUB_PATH
-          echo "$PS3DEV/ppu/bin" >> $GITHUB_PATH
-          echo "$PS3DEV/spu/bin" >> $GITHUB_PATH
-
-      - name: Restaurar cache de la toolchain
+      - name: Restaurar caché de PS3DEV + PSL1GHT
         id: cache
-        uses: actions/cache/restore@v4
+        uses: actions/cache@v4
         with:
           path: /usr/local/ps3dev
-          key: ps3dev-toolchain-v1
+          key: ps3dev-psl1ght-ubuntu22-v2
 
-      - name: Compilar la toolchain (solo la primera vez)
+      - name: Compilar la toolchain de PS3
         if: steps.cache.outputs.cache-hit != 'true'
         run: |
-          sudo mkdir -p $PS3DEV && sudo chown -R $USER $PS3DEV
-          git clone https://github.com/ps3dev/ps3toolchain.git /tmp/ps3toolchain
-          cd /tmp/ps3toolchain && ./toolchain.sh
+          set -euo pipefail
+          sudo mkdir -p "$PS3DEV"
+          sudo chown -R "$USER":"$USER" "$PS3DEV"
+          git clone --depth 1 https://github.com/ps3dev/ps3toolchain.git /tmp/ps3toolchain
+          cd /tmp/ps3toolchain
+          ./toolchain.sh
 
-      - name: Guardar toolchain en cache
+      - name: Instalar el SDK PSL1GHT y sus reglas
         if: steps.cache.outputs.cache-hit != 'true'
-        uses: actions/cache/save@v4
-        with:
-          path: /usr/local/ps3dev
-          key: ps3dev-toolchain-v1
+        run: |
+          set -euo pipefail
+          export PATH="$PS3DEV/bin:$PS3DEV/ppu/bin:$PS3DEV/spu/bin:$PATH"
+          git clone --depth 1 https://github.com/ps3dev/PSL1GHT.git /tmp/PSL1GHT
+          cd /tmp/PSL1GHT
+          make install-ctrl
+          make -j2
+          make install
 
-      - name: Compilar el PKG
+      - name: Comprobar herramientas del SDK
+        run: |
+          set -euo pipefail
+          echo "$PS3DEV/bin" >> "$GITHUB_PATH"
+          echo "$PS3DEV/ppu/bin" >> "$GITHUB_PATH"
+          echo "$PS3DEV/spu/bin" >> "$GITHUB_PATH"
+          test -f "$PSL1GHT/ppu_rules"
+          test -f "$PSL1GHT/base_rules"
+          for tool in ppu-gcc make_self make_self_npdrm pkg sfo package_finalize; do
+            command -v "$tool" || {
+              echo "::error::No se encontró la herramienta requerida: $tool"
+              exit 1
+            }
+          done
+
+      - name: Corregir el objetivo pkg del Makefile
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          p = Path("nova-launcher/Makefile")
+          s = p.read_text()
+          marker = "include $(PSL1GHT)/base_rules"
+          if marker not in s:
+              raise SystemExit("No se encontró la inclusión de base_rules en el Makefile")
+          if "pkg: $(OUT).pkg" not in s:
+              s = s.replace(
+                  marker,
+                  marker + "\n\n# Conecta el objetivo solicitado por GitHub Actions con el PKG real.\npkg: $(OUT).pkg",
+                  1,
+              )
+          p.write_text(s)
+          print("Objetivo pkg configurado -> build_ps3/ps5launcher.pkg")
+          PY
+
+      - name: Compilar el PKG (con audio)
+        id: build_audio
+        continue-on-error: true
         working-directory: nova-launcher
-        run: make pkg
+        run: |
+          set -euo pipefail
+          make clean
+          make -j2 AUDIO=1 pkg
+          test -s build_ps3/ps5launcher.pkg
 
-      - name: Subir el PKG
+      - name: Reintentar sin audio si falla la compilación de audio
+        if: steps.build_audio.outcome == 'failure'
+        working-directory: nova-launcher
+        run: |
+          set -euo pipefail
+          make clean
+          make -j2 AUDIO=0 pkg
+          test -s build_ps3/ps5launcher.pkg
+
+      - name: Verificar y publicar el PKG
         uses: actions/upload-artifact@v4
         with:
-          name: nova-launcher-pkg
+          name: nova-launcher-ps3-pkg
           path: |
-            nova-launcher/**/*.pkg
-            nova-launcher/**/*.self
-          if-no-files-found: warn
+            nova-launcher/build_ps3/ps5launcher.pkg
+            nova-launcher/build_ps3/ps5launcher.self
+            nova-launcher/build_ps3/ps5launcher.elf
+          if-no-files-found: error
+          retention-days: 14
