@@ -55,7 +55,6 @@ jobs:
           echo "$PS3DEV/ppu/bin" >> "$GITHUB_PATH"
           echo "$PS3DEV/spu/bin" >> "$GITHUB_PATH"
           export PATH="$PS3DEV/bin:$PS3DEV/ppu/bin:$PS3DEV/spu/bin:$PATH"
-          mkdir -p "$PS3DEV/bin"
 
       - name: Compilar la toolchain de PS3
         if: steps.cache.outputs.cache-hit != 'true'
