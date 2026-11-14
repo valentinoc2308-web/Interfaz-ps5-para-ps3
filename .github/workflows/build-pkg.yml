@@ -49,10 +49,19 @@ jobs:
           path: /usr/local/ps3dev
           key: ps3dev-psl1ght-ubuntu22-v2
 
+      - name: Preparar PATH de PS3DEV antes de compilar
+        run: |
+          echo "$PS3DEV/bin" >> "$GITHUB_PATH"
+          echo "$PS3DEV/ppu/bin" >> "$GITHUB_PATH"
+          echo "$PS3DEV/spu/bin" >> "$GITHUB_PATH"
+          export PATH="$PS3DEV/bin:$PS3DEV/ppu/bin:$PS3DEV/spu/bin:$PATH"
+          mkdir -p "$PS3DEV/bin"
+
       - name: Compilar la toolchain de PS3
         if: steps.cache.outputs.cache-hit != 'true'
         run: |
           set -euo pipefail
+          export PATH="$PS3DEV/bin:$PS3DEV/ppu/bin:$PS3DEV/spu/bin:$PATH"
           sudo mkdir -p "$PS3DEV"
           sudo chown -R "$USER":"$USER" "$PS3DEV"
           git clone --depth 1 https://github.com/ps3dev/ps3toolchain.git /tmp/ps3toolchain
@@ -73,9 +82,6 @@ jobs:
       - name: Comprobar herramientas del SDK
         run: |
           set -euo pipefail
-          echo "$PS3DEV/bin" >> "$GITHUB_PATH"
-          echo "$PS3DEV/ppu/bin" >> "$GITHUB_PATH"
-          echo "$PS3DEV/spu/bin" >> "$GITHUB_PATH"
           test -f "$PSL1GHT/ppu_rules"
           test -f "$PSL1GHT/base_rules"
           for tool in ppu-gcc make_self make_self_npdrm pkg sfo package_finalize; do
