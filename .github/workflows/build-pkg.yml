@@ -26,6 +26,24 @@ jobs:
           unzip -q "$ZIP" -d .
           test -f nova-launcher/Makefile
           test -f nova-launcher/host/run_tests.sh
+          # PSL1GHT expone Berkeley sockets en net/socket.h, no sys/socket.h.
+          python3 - <<'PY'
+          from pathlib import Path
+          p = Path("nova-launcher/src/net_http.c")
+          if not p.is_file():
+              raise SystemExit(f"No se encontró el fuente esperado: {p}")
+          source = p.read_text()
+          old = "#include <sys/socket.h>"
+          new = "#include <net/socket.h>"
+          if old in source:
+              source = source.replace(old, new, 1)
+              p.write_text(source)
+              print("Adaptado el include de sockets para PSL1GHT: net/socket.h")
+          elif new in source:
+              print("El include de sockets ya es compatible con PSL1GHT")
+          else:
+              raise SystemExit("No se encontró el include de sockets esperado; no se aplica un parche a ciegas")
+          PY
           echo "Proyecto encontrado:"
           find nova-launcher -maxdepth 2 -type f | sort | head -60
 
