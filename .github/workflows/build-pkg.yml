@@ -94,6 +94,9 @@ jobs:
           marker = "include $(PSL1GHT)/base_rules"
           if marker not in s:
               raise SystemExit("No se encontró la inclusión de base_rules en el Makefile")
+          # PSL1GHT usa BUILDDIR para localizar el ELF al empaquetar.
+          if "BUILDDIR :=" not in s:
+              s = s.replace("BUILD     := build_ps3", "BUILD     := build_ps3\nBUILDDIR := $(CURDIR)/$(BUILD)", 1)
           if "pkg: $(OUT).pkg" not in s:
               s = s.replace(
                   marker,
