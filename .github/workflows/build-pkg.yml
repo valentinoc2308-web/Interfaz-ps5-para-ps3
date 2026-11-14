@@ -1,0 +1,51 @@
+name: Build PKG
+on:
+  workflow_dispatch:
+
+jobs:
+  pkg:
+    runs-on: ubuntu-22.04
+    env:
+      PS3DEV: /usr/local/ps3dev
+      PSL1GHT: /usr/local/ps3dev
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Descomprimir el proyecto
+        run: unzip -q ./*.zip
+
+      - name: Dependencias
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y autoconf automake bison flex gcc g++ make libelf-dev texinfo \
+            libncurses5-dev patch python3 python-is-python3 subversion wget zlib1g-dev libtool-bin \
+            python3-dev bzip2 libgmp3-dev pkg-config libssl-dev git
+
+      - name: Cache de la toolchain
+        id: cache
+        uses: actions/cache@v4
+        with:
+          path: /usr/local/ps3dev
+          key: ps3dev-toolchain-v1
+
+      - name: Compilar la toolchain (solo la primera vez)
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: |
+          sudo mkdir -p $PS3DEV && sudo chown -R $USER $PS3DEV
+          git clone https://github.com/ps3dev/ps3toolchain.git /tmp/ps3toolchain
+          cd /tmp/ps3toolchain && ./toolchain.sh
+
+      - name: Compilar el PKG
+        working-directory: nova-launcher
+        run: |
+          export PATH=$PATH:$PS3DEV/bin:$PS3DEV/ppu/bin:$PS3DEV/spu/bin
+          make pkg
+
+      - name: Subir el PKG
+        uses: actions/upload-artifact@v4
+        with:
+          name: nova-launcher-pkg
+          path: |
+            nova-launcher/**/*.pkg
+            nova-launcher/**/*.self
+          if-no-files-found: warn
