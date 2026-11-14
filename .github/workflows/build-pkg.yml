@@ -21,9 +21,15 @@ jobs:
             libncurses5-dev patch python3 python-is-python3 subversion wget zlib1g-dev libtool-bin \
             python3-dev bzip2 libgmp3-dev pkg-config libssl-dev git
 
-      - name: Cache de la toolchain
+      - name: Agregar la toolchain al PATH
+        run: |
+          echo "$PS3DEV/bin" >> $GITHUB_PATH
+          echo "$PS3DEV/ppu/bin" >> $GITHUB_PATH
+          echo "$PS3DEV/spu/bin" >> $GITHUB_PATH
+
+      - name: Restaurar cache de la toolchain
         id: cache
-        uses: actions/cache@v4
+        uses: actions/cache/restore@v4
         with:
           path: /usr/local/ps3dev
           key: ps3dev-toolchain-v1
@@ -35,11 +41,16 @@ jobs:
           git clone https://github.com/ps3dev/ps3toolchain.git /tmp/ps3toolchain
           cd /tmp/ps3toolchain && ./toolchain.sh
 
+      - name: Guardar toolchain en cache
+        if: steps.cache.outputs.cache-hit != 'true'
+        uses: actions/cache/save@v4
+        with:
+          path: /usr/local/ps3dev
+          key: ps3dev-toolchain-v1
+
       - name: Compilar el PKG
         working-directory: nova-launcher
-        run: |
-          export PATH=$PATH:$PS3DEV/bin:$PS3DEV/ppu/bin:$PS3DEV/spu/bin
-          make pkg
+        run: make pkg
 
       - name: Subir el PKG
         uses: actions/upload-artifact@v4
