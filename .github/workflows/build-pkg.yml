@@ -140,7 +140,7 @@ jobs:
         run: |
           set -euo pipefail
           make clean
-          make -j2 AUDIO=1 pkg
+          make -j2 AUDIO=1 'CFLAGS+=-I$(PSL1GHT)/ppu/include' pkg
           test -s build_ps3/ps5launcher.pkg
 
       - name: Reintentar sin audio si falla la compilación de audio
@@ -149,7 +149,7 @@ jobs:
         run: |
           set -euo pipefail
           make clean
-          make -j2 AUDIO=0 pkg
+          make -j2 AUDIO=0 'CFLAGS+=-I$(PSL1GHT)/ppu/include' pkg
           test -s build_ps3/ps5launcher.pkg
 
       - name: Verificar y publicar el PKG
