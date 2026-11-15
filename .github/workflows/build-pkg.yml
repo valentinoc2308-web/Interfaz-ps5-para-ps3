@@ -26,7 +26,17 @@ jobs:
           unzip -q "$ZIP" -d .
           test -f nova-launcher/Makefile
           test -f nova-launcher/host/run_tests.sh
-          # PSL1GHT expone Berkeley sockets en net/socket.h, no sys/socket.h.
+          echo "Proyecto encontrado:"
+          find nova-launcher -maxdepth 2 -type f | sort | head -60
+
+      - name: Ejecutar pruebas del launcher en PC
+        working-directory: nova-launcher
+        run: bash host/run_tests.sh
+
+      - name: Adaptar sockets para PSL1GHT
+        run: |
+          set -euo pipefail
+          # El test host usa los headers POSIX de Linux; el cambio es solo para el target PS3.
           python3 - <<'PY'
           from pathlib import Path
           p = Path("nova-launcher/src/net_http.c")
@@ -36,20 +46,13 @@ jobs:
           old = "#include <sys/socket.h>"
           new = "#include <net/socket.h>"
           if old in source:
-              source = source.replace(old, new, 1)
-              p.write_text(source)
+              p.write_text(source.replace(old, new, 1))
               print("Adaptado el include de sockets para PSL1GHT: net/socket.h")
           elif new in source:
               print("El include de sockets ya es compatible con PSL1GHT")
           else:
               raise SystemExit("No se encontró el include de sockets esperado; no se aplica un parche a ciegas")
           PY
-          echo "Proyecto encontrado:"
-          find nova-launcher -maxdepth 2 -type f | sort | head -60
-
-      - name: Ejecutar pruebas del launcher en PC
-        working-directory: nova-launcher
-        run: bash host/run_tests.sh
 
       - name: Instalar dependencias
         run: |
