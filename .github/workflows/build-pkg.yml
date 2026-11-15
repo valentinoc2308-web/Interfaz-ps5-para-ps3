@@ -45,17 +45,17 @@ jobs:
           source = p.read_text()
           old = "#include <sys/socket.h>"
           new = "#include <net/socket.h>"
-          # PSL1GHT no expone struct timeval desde net/socket.h.
-          timeval = "#include <sys/time.h>"
-          if timeval not in source:
-              source = source.replace(new, new + "\\n" + timeval, 1)
           if old in source:
-              p.write_text(source.replace(old, new, 1))
+              source = source.replace(old, new, 1)
               print("Adaptado el include de sockets para PSL1GHT: net/socket.h")
           elif new in source:
               print("El include de sockets ya es compatible con PSL1GHT")
           else:
               raise SystemExit("No se encontró el include de sockets esperado; no se aplica un parche a ciegas")
+          timeval = "#include <sys/time.h>"
+          if timeval not in source:
+              source = source.replace(new, new + "\\n" + timeval, 1)
+          p.write_text(source)
           PY
 
       - name: Instalar dependencias
