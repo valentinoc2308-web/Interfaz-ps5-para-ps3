@@ -54,7 +54,7 @@ jobs:
               raise SystemExit("No se encontró el include de sockets esperado; no se aplica un parche a ciegas")
           timeval = "#include <sys/time.h>"
           if timeval not in source:
-              source = source.replace(new, new + "\\n" + timeval, 1)
+              source = source.replace(new, new + "\n" + timeval, 1)
           p.write_text(source)
           PY
 
