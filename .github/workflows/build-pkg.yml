@@ -58,6 +58,27 @@ jobs:
           p.write_text(source)
           PY
 
+      - name: Corregir el campo de audio para PSL1GHT
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+          p = Path("nova-launcher/ps3/audio_ps3.c")
+          if not p.is_file():
+              raise SystemExit(f"No se encontró el fuente esperado: {p}")
+          source = p.read_text()
+          old = "p.attr = 0;"
+          new = "p.attrib = 0;"
+          if old in source:
+              source = source.replace(old, new, 1)
+              p.write_text(source)
+              print("Corregido audioPortParam: attr -> attrib")
+          elif new in source:
+              print("El campo attrib ya está aplicado")
+          else:
+              raise SystemExit("No se encontró la asignación de audio esperada; no se aplica un parche a ciegas")
+          PY
+
       - name: Instalar dependencias
         run: |
           sudo apt-get update
