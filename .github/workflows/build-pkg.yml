@@ -33,6 +33,18 @@ jobs:
         working-directory: nova-launcher
         run: bash host/run_tests.sh
 
+      - name: Diagnosticar arranque PS3 (sin modificar el código)
+        run: |
+          set -euo pipefail
+          echo "===== MAKEFILE ====="
+          sed -n '1,240p' nova-launcher/Makefile
+          for f in nova-launcher/ps3/main_ps3.c nova-launcher/src/gfx.c nova-launcher/src/gfx.h nova-launcher/src/platform.h nova-launcher/src/ui.c nova-launcher/src/input.c nova-launcher/README.md nova-launcher/docs/BUILD.md; do
+            echo "===== $f ====="
+            sed -n '1,280p' "$f"
+          done
+          echo "===== ASSETS / ENTRY / VIDEO / RSX SYMBOLS ====="
+          grep -RniE 'int main|sysModuleLoad|video|rsx|gfx_init|font_init|audio_init|ioPad|exit\(' nova-launcher/ps3 nova-launcher/src | head -240 || true
+
       - name: Adaptar sockets para PSL1GHT
         run: |
           set -euo pipefail
