@@ -31,7 +31,7 @@
 python inventory_game_resources.py "C:\\GTA5-PS3-RECURSOS" -o "resource-inventory.json"
 ```
 
-5. El programa crea `resource-inventory.json` con rutas relativas, tamaños y hashes SHA-256 de los archivos candidatos.
+5. El programa crea `resource-inventory.json` con rutas relativas, tamaños, los primeros 16 bytes en hexadecimal y hashes SHA-256 de los archivos candidatos.
 6. Abre ese JSON y comprueba que solo contiene metadatos. Ese informe es lo único que debes compartir para que podamos revisar la estructura.
 
 Si Windows dice que `python` no se reconoce, instala Python desde su sitio oficial o usa un ordenador que ya tenga Python 3. No ejecutes archivos desconocidos descargados de páginas de mods.
@@ -48,9 +48,9 @@ python3 inventory_game_resources.py "/ruta/a/tu/carpeta-de-recursos" -o resource
 
 **Sí hace:**
 - Busca archivos con extensiones RPF, CTD y GFX, además de `hudcolor.dat`.
-- Registra ruta relativa, tamaño y SHA-256.
+- Registra ruta relativa, tamaño, los primeros 16 bytes como huella hexadecimal y SHA-256.
 - Evita seguir enlaces simbólicos.
-- No escribe dentro de la carpeta de recursos.
+- No escribe dentro de la carpeta de recursos.\n- No interpreta esa huella como prueba de compatibilidad: solo permite comparar cabeceras y reconocer candidatos.
 
 **No hace:**
 - No extrae ni abre archivos RPF.
