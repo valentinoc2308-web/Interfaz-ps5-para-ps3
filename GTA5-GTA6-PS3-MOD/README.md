@@ -43,4 +43,4 @@ The target title ID is NPEB01283 and the planned update is 1.27. Neither title I
 
 Never overwrite the original game without a verified backup. Do not install files made for another title ID or region. Do not use a package if its source or contents are unknown.
 
-See [roadmap](docs/ROADMAP.md), [compatibility notes](docs/COMPATIBILITY.md), [test plan](docs/TEST-PLAN-1.27.md), and [asset policy](docs/ASSET-POLICY.md).
+See [roadmap](docs/ROADMAP.md), [compatibility notes](docs/COMPATIBILITY.md), [test plan](docs/TEST-PLAN-1.27.md), [asset policy](docs/ASSET-POLICY.md), and [native integration/release gates](docs/INTEGRATION-GATES.md).
