@@ -4,9 +4,9 @@
 
 - `validate_project.py`: checks the project manifest, target declaration, distribution policy, payload paths, and SHA-256 hashes.
 - `test_validate_project.py`: regression tests for safe paths and blocked game/package file types.
-- `validate_assets.py`: validates the registered original SVG interface artwork, dimensions, asset IDs, paths, and source-only status.
-- `test_validate_assets.py`: regression tests for the HUD and pause-menu source assets.
-- `build_hud_preview.py`: renders the registered SVG artwork into transparent/opaque PNG previews and verifies PNG signatures and dimensions.
+- `validate_assets.py`: validates all registered original SVG interface artwork, dimensions, asset IDs, paths, and source-only status.
+- `test_validate_assets.py`: regression tests for every registered SVG and the asset registry.
+- `build_hud_preview.py`: renders every registered SVG into PNG previews and verifies PNG signatures and dimensions.
 
 Run from this directory:
 
