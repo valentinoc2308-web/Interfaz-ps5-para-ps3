@@ -43,4 +43,4 @@ To inventory an extracted copy (from this directory):
 python inventory_game_resources.py /path/to/your/extracted/update -o resource-inventory.json
 ```
 
-The report contains metadata only. A filename/hash does not prove title ID or update compatibility. Do not upload or publish game archives; if asking for help, share only the JSON metadata report.
+The report contains metadata only. A filename/hash does not prove title ID or update compatibility. Do not upload or publish game archives; if asking for help, share only the JSON metadata report. For step-by-step preparation in Spanish, see [docs/GUIA-PREPARACION-RECURSOS-ES.md](../docs/GUIA-PREPARACION-RECURSOS-ES.md).
