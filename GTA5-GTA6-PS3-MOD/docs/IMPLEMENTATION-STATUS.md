@@ -3,12 +3,12 @@ GTA V digital Europe, title ID NPEB01283, planned update 1.27, PS3 HEN.
 
 ## Artwork and tooling committed
 - Project manifest, asset manifest, path/hash/policy validators, regression tests, preview renderer, and GitHub Actions workflow definition.
-- Eleven original 1280×720 SVG interface concepts: driving HUD, pause menu, loading screen, title screen, schematic map, phone, settings, mission briefing, vehicle gallery, save/load, and notification cards.
-- All eleven SVG assets are registered as source-only artwork. None is integrated into GTA V, and compatibility with update 1.27 remains unverified.
+- Twelve original 1280×720 SVG interface concepts: driving HUD, pause menu, loading screen, title screen, schematic map, phone, settings, mission briefing, vehicle gallery, save/load, notification cards, and controller interaction prompts.
+- All twelve SVG assets are registered as source-only artwork. None is integrated into GTA V, and compatibility with update 1.27 remains unverified.
 - The preview renderer reads the asset registry and generates a PNG preview for every registered SVG. These previews are review artifacts only, not PS3 game textures.
 
 ## What the screens mean
-The map SVG is a schematic interface mockup. It is not a recreation of the real San Andreas map, contains no game geography, and is not navigable. The loading, title, phone, settings, briefing, gallery, save/load, notification, HUD, and pause-menu SVGs are static concept artwork; they do not respond to controller input or load live game data.
+The map SVG is a schematic interface mockup. It is not a recreation of the real San Andreas map, contains no game geography, and is not navigable. The loading, title, phone, settings, briefing, gallery, save/load, notification, interaction-prompt, HUD, and pause-menu SVGs are static concept artwork; they do not respond to controller input or load live game data.
 
 ## Still required for a complete cosmetic mod
 1. Confirm the installed GTA V build and exact update 1.27 state for NPEB01283.
