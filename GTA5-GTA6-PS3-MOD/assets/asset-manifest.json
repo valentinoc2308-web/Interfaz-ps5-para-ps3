@@ -132,6 +132,18 @@
       "integration": "source_only_not_in_game",
       "target_update": "1.27",
       "target_status": "unverified"
+    },
+    {
+      "id": "interaction_prompts",
+      "path": "ui/interaction_prompts.svg",
+      "format": "svg",
+      "width": 1280,
+      "height": 720,
+      "alpha": false,
+      "license": "Original project artwork",
+      "integration": "source_only_not_in_game",
+      "target_update": "1.27",
+      "target_status": "unverified"
     }
   ]
 }
