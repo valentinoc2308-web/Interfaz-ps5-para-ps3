@@ -46,10 +46,13 @@ def inventory(root: Path, include_hashes: bool = True) -> list[dict]:
                 continue
             try:
                 stat = path.stat()
+                with path.open("rb") as stream:
+                    header = stream.read(16)
                 record = {
                     "path": path.relative_to(root).as_posix(),
                     "size_bytes": stat.st_size,
                     "extension": path.suffix.lower(),
+                    "header_16_bytes_hex": header.hex(),
                 }
                 if include_hashes:
                     record["sha256"] = sha256_file(path)
