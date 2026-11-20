@@ -45,6 +45,17 @@ class UiAssetTests(unittest.TestCase):
                 self.assertEqual(entry["target_update"], "1.27")
                 self.assertEqual(entry["target_status"], "unverified")
 
+    def test_registry_paths_are_unique_and_dimensions_are_bounded(self):
+        paths = [entry["path"] for entry in self.registry["assets"]]
+        self.assertEqual(len(paths), len(set(paths)))
+        for entry in self.registry["assets"]:
+            self.assertIs(type(entry["width"]), int)
+            self.assertIs(type(entry["height"]), int)
+            self.assertGreaterEqual(entry["width"], 1)
+            self.assertGreaterEqual(entry["height"], 1)
+            self.assertLessEqual(entry["width"], 8192)
+            self.assertLessEqual(entry["height"], 8192)
+
     def test_asset_validator_passes(self):
         result = subprocess.run(
             [sys.executable, str(VALIDATOR)],
