@@ -10,7 +10,6 @@ from __future__ import annotations
 
 import hashlib
 import json
-import sys
 from pathlib import Path, PurePosixPath
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -63,6 +62,8 @@ def main() -> None:
         manifest = json.loads(MANIFEST.read_text(encoding="utf-8"))
     except (OSError, json.JSONDecodeError) as exc:
         fail(f"Cannot read manifest: {exc}")
+    if not isinstance(manifest, dict):
+        fail("Manifest root must be a JSON object.")
 
     target = manifest.get("target")
     if not isinstance(target, dict):
@@ -85,6 +86,8 @@ def main() -> None:
             fail(f"Distribution policy must keep {key}=false.")
 
     payload_name = manifest.get("payload_directory", "payload")
+    if not isinstance(payload_name, str) or not payload_name:
+        fail("Payload directory must be a non-empty relative path.")
     payload_root = (ROOT / payload_name).resolve()
     try:
         payload_root.relative_to(ROOT.resolve())
@@ -102,6 +105,8 @@ def main() -> None:
         if not isinstance(entry, dict):
             fail("Every file entry must be an object.")
         relative = entry.get("path")
+        if not isinstance(relative, str) or not relative:
+            fail("Each file entry needs a non-empty string path.")
         if relative in seen:
             fail(f"Duplicate payload entry: {relative}")
         seen.add(relative)
