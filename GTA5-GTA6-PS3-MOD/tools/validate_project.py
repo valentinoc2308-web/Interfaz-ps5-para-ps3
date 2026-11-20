@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import re
 from pathlib import Path, PurePosixPath
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -43,7 +44,13 @@ def safe_payload_path(payload_root: Path, relative: str) -> Path:
     posix = PurePosixPath(relative)
     if posix.is_absolute() or ".." in posix.parts or "\\" in relative:
         fail(f"Unsafe payload path: {relative!r}")
-    candidate = (payload_root / Path(*posix.parts)).resolve()
+    unresolved = payload_root / Path(*posix.parts)
+    current = payload_root
+    for part in posix.parts:
+        current = current / part
+        if current.is_symlink():
+            fail(f"Symbolic links are not allowed in payload paths: {relative!r}")
+    candidate = unresolved.resolve()
     try:
         candidate.relative_to(payload_root.resolve())
     except ValueError:
@@ -75,7 +82,9 @@ def main() -> None:
     if target.get("update_status") != "planned_unverified":
         print("WARNING: update status is not marked planned_unverified; verify hardware first.")
 
-    policy = manifest.get("distribution_policy", {})
+    policy = manifest.get("distribution_policy")
+    if not isinstance(policy, dict):
+        fail("Manifest distribution_policy must be an object.")
     for key in (
         "include_rockstar_game_data",
         "include_original_game_executables",
@@ -114,7 +123,7 @@ def main() -> None:
         if not path.is_file():
             fail(f"Missing payload file: {relative}")
         expected_hash = entry.get("sha256")
-        if not isinstance(expected_hash, str) or len(expected_hash) != 64:
+        if not isinstance(expected_hash, str) or not re.fullmatch(r"[0-9a-fA-F]{64}", expected_hash):
             fail(f"Missing/invalid SHA-256 for {relative}")
         actual_hash = sha256(path)
         if actual_hash.lower() != expected_hash.lower():
