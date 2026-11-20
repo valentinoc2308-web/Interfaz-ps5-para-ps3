@@ -63,7 +63,7 @@ def validate_svg(entry: dict) -> None:
         if local in FORBIDDEN_ELEMENTS:
             fail(f"active/embedded element is not allowed in {relative}: {local}")
         if local == "style" and element.text:
-            if EXTERNAL_URL.search(element.text) or re.search(r"url\\s*\\(\\s*(?![#'\\"])", element.text, re.IGNORECASE):
+            if EXTERNAL_URL.search(element.text) or re.search(r"url\s*\(\s*(?![#'\"])", element.text, re.IGNORECASE):
                 fail(f"external CSS resource is not allowed in {relative}: <style>")
             if re.search(r"@import\\b", element.text, re.IGNORECASE):
                 fail(f"CSS imports are not allowed in {relative}")
