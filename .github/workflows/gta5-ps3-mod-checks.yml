@@ -30,3 +30,13 @@ jobs:
         run: python GTA5-GTA6-PS3-MOD/tools/validate_project.py
       - name: Validate original HUD SVG source
         run: python GTA5-GTA6-PS3-MOD/tools/validate_assets.py
+      - name: Install SVG renderer
+        run: python -m pip install CairoSVG
+      - name: Render transparent HUD preview
+        run: python GTA5-GTA6-PS3-MOD/tools/build_hud_preview.py
+      - name: Upload HUD preview artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: gta5-ps3-hud-preview
+          path: GTA5-GTA6-PS3-MOD/build/modern_hud_concept.png
+          if-no-files-found: error
