@@ -1,0 +1,68 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720">
+  <title>Original modern open-world HUD concept</title>
+  <desc>Transparent HUD concept for an offline single-player visual mod. All branding and artwork are original.</desc>
+  <defs>
+    <linearGradient id="panel" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#111820" stop-opacity=".88"/>
+      <stop offset="1" stop-color="#26313a" stop-opacity=".78"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#4ce0c1"/>
+      <stop offset="1" stop-color="#7bc9ff"/>
+    </linearGradient>
+    <filter id="shadow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="5"/>
+    </filter>
+  </defs>
+
+  <!-- Top-right status panel -->
+  <g font-family="Arial, Helvetica, sans-serif">
+    <rect x="900" y="38" width="330" height="112" rx="14" fill="#000" opacity=".24" filter="url(#shadow)"/>
+    <rect x="896" y="34" width="330" height="112" rx="14" fill="url(#panel)" stroke="#ffffff" stroke-opacity=".16"/>
+    <path d="M916 53h4v74h-4z" fill="url(#accent)"/>
+    <text x="936" y="66" fill="#a7b7c2" font-size="13" letter-spacing="2.5">SAN ANDREAS</text>
+    <text x="936" y="96" fill="#ffffff" font-size="23" font-weight="700">FRIDAY</text>
+    <text x="936" y="122" fill="#dce8ed" font-size="15">21:35  ·  CLEAR</text>
+    <text x="1198" y="73" fill="#4ce0c1" font-size="14" text-anchor="end">ONLINE</text>
+    <circle cx="1209" cy="68" r="4" fill="#4ce0c1"/>
+  </g>
+
+  <!-- Money and activity -->
+  <g font-family="Arial, Helvetica, sans-serif" text-anchor="end">
+    <rect x="1010" y="166" width="216" height="74" rx="12" fill="url(#panel)" stroke="#ffffff" stroke-opacity=".14"/>
+    <text x="1206" y="191" fill="#a7b7c2" font-size="12" letter-spacing="2">WALLET</text>
+    <text x="1206" y="222" fill="#ffffff" font-size="25" font-weight="700">$ 24,850</text>
+  </g>
+
+  <!-- Bottom-left location and minimap frame -->
+  <g font-family="Arial, Helvetica, sans-serif">
+    <rect x="34" y="522" width="310" height="164" rx="16" fill="#000000" opacity=".22" filter="url(#shadow)"/>
+    <rect x="30" y="518" width="310" height="164" rx="16" fill="url(#panel)" stroke="#ffffff" stroke-opacity=".18"/>
+    <rect x="45" y="533" width="116" height="116" rx="12" fill="#18262d" stroke="#ffffff" stroke-opacity=".18"/>
+    <path d="M51 614L84 587L104 598L151 554M50 566L78 579L93 552L132 543M64 645L91 626L115 638L151 613" fill="none" stroke="#4ce0c1" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" opacity=".9"/>
+    <path d="M103 542L103 641M51 592L156 592" stroke="#a7b7c2" stroke-opacity=".28" stroke-width="1.5" stroke-dasharray="4 5"/>
+    <circle cx="104" cy="592" r="6" fill="#ffffff" stroke="#4ce0c1" stroke-width="3"/>
+    <text x="178" y="557" fill="#a7b7c2" font-size="12" letter-spacing="2">CURRENT AREA</text>
+    <text x="178" y="584" fill="#ffffff" font-size="18" font-weight="700">VESPUCCI</text>
+    <text x="178" y="608" fill="#ffffff" font-size="18" font-weight="700">BEACH</text>
+    <path d="M178 624h132" stroke="#ffffff" stroke-opacity=".16"/>
+    <text x="178" y="646" fill="#4ce0c1" font-size="12" letter-spacing="1.5">WEST LOS SANTOS</text>
+  </g>
+
+  <!-- Bottom-right vehicle readout -->
+  <g font-family="Arial, Helvetica, sans-serif">
+    <rect x="1014" y="574" width="212" height="112" rx="14" fill="url(#panel)" stroke="#ffffff" stroke-opacity=".17"/>
+    <text x="1034" y="600" fill="#a7b7c2" font-size="11" letter-spacing="2">VEHICLE</text>
+    <text x="1034" y="626" fill="#ffffff" font-size="17" font-weight="700">COUPE SPORT</text>
+    <text x="1034" y="661" fill="#4ce0c1" font-size="28" font-weight="700">084</text>
+    <text x="1092" y="660" fill="#a7b7c2" font-size="11">KM/H</text>
+    <rect x="1160" y="643" width="46" height="8" rx="4" fill="#ffffff" opacity=".15"/>
+    <rect x="1160" y="643" width="31" height="8" rx="4" fill="url(#accent)"/>
+  </g>
+
+  <!-- Minimal interaction hint -->
+  <g font-family="Arial, Helvetica, sans-serif">
+    <rect x="500" y="648" width="280" height="38" rx="19" fill="#101820" opacity=".76" stroke="#ffffff" stroke-opacity=".15"/>
+    <text x="640" y="672" fill="#dce8ed" font-size="12" text-anchor="middle" letter-spacing="1">HOLD  □  TO OPEN INTERACTIONS</text>
+  </g>
+</svg>
