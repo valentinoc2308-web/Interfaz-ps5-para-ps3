@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720">
+  <title>Original modern open-world pause menu concept</title>
+  <desc>Original offline single-player pause menu layout, designed as transparent source artwork.</desc>
+  <defs>
+    <linearGradient id="shade" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0b1219" stop-opacity=".94"/>
+      <stop offset="1" stop-color="#1b2933" stop-opacity=".91"/>
+    </linearGradient>
+    <linearGradient id="mint" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#4ce0c1"/>
+      <stop offset="1" stop-color="#83d6ff"/>
+    </linearGradient>
+  </defs>
+  <rect x="0" y="0" width="1280" height="720" fill="#050a0e" opacity=".42"/>
+  <rect x="54" y="42" width="1172" height="636" rx="22" fill="url(#shade)" stroke="#ffffff" stroke-opacity=".16"/>
+  <rect x="54" y="42" width="300" height="636" rx="22" fill="#101b24" opacity=".96"/>
+  <path d="M354 42v636" stroke="#ffffff" stroke-opacity=".12"/>
+  <g font-family="Arial, Helvetica, sans-serif">
+    <text x="92" y="103" fill="#4ce0c1" font-size="13" letter-spacing="4">SAN ANDREAS</text>
+    <text x="92" y="150" fill="#ffffff" font-size="31" font-weight="700">PAUSE MENU</text>
+    <text x="92" y="181" fill="#9eafb9" font-size="13" letter-spacing="1.5">SINGLE PLAYER</text>
+
+    <rect x="82" y="224" width="244" height="52" rx="10" fill="#263943"/>
+    <rect x="82" y="224" width="4" height="52" rx="2" fill="url(#mint)"/>
+    <text x="108" y="256" fill="#ffffff" font-size="16" font-weight="700">MAP</text>
+    <text x="108" y="318" fill="#b6c3ca" font-size="16">JOURNAL</text>
+    <text x="108" y="374" fill="#b6c3ca" font-size="16">VEHICLES</text>
+    <text x="108" y="430" fill="#b6c3ca" font-size="16">STATISTICS</text>
+    <text x="108" y="486" fill="#b6c3ca" font-size="16">SETTINGS</text>
+    <path d="M92 548h220" stroke="#ffffff" stroke-opacity=".14"/>
+    <text x="92" y="583" fill="#8fa1ab" font-size="12" letter-spacing="1.5">SESSION</text>
+    <text x="92" y="610" fill="#ffffff" font-size="15">FRIDAY · 21:35</text>
+    <text x="92" y="638" fill="#4ce0c1" font-size="12">PROGRESS SAVED LOCALLY</text>
+
+    <text x="398" y="102" fill="#a9bac4" font-size="13" letter-spacing="2.5">WEST LOS SANTOS</text>
+    <text x="398" y="150" fill="#ffffff" font-size="32" font-weight="700">YOUR CITY</text>
+    <text x="398" y="181" fill="#a9bac4" font-size="14">Explore locations and plan your next destination.</text>
+
+    <rect x="398" y="220" width="784" height="280" rx="16" fill="#172630" stroke="#ffffff" stroke-opacity=".14"/>
+    <path d="M420 448L520 360L620 390L734 280L848 338L948 260L1158 420" fill="none" stroke="#4ce0c1" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" opacity=".85"/>
+    <path d="M430 275L560 310L654 260L768 385L875 360L1004 460L1150 290M430 400L545 430L640 360L755 460L880 285L1020 350L1150 390" fill="none" stroke="#9eb0ba" stroke-opacity=".26" stroke-width="3"/>
+    <path d="M480 238V482M650 238V482M820 238V482M990 238V482M1140 238V482M420 300H1160M420 390H1160" stroke="#ffffff" stroke-opacity=".08" stroke-width="1.5"/>
+    <circle cx="734" cy="280" r="10" fill="#ffffff" stroke="#4ce0c1" stroke-width="4"/>
+    <rect x="754" y="255" width="124" height="34" rx="17" fill="#0b151d" stroke="#4ce0c1" stroke-opacity=".55"/>
+    <text x="816" y="277" fill="#ffffff" font-size="12" text-anchor="middle">YOU ARE HERE</text>
+
+    <rect x="398" y="526" width="376" height="112" rx="14" fill="#1b2b35" stroke="#ffffff" stroke-opacity=".13"/>
+    <text x="424" y="555" fill="#9eafb9" font-size="12" letter-spacing="2">CURRENT OBJECTIVE</text>
+    <text x="424" y="587" fill="#ffffff" font-size="18" font-weight="700">A NEW DAY IN THE CITY</text>
+    <text x="424" y="613" fill="#a9bac4" font-size="13">Continue exploring the open world.</text>
+
+    <rect x="794" y="526" width="388" height="112" rx="14" fill="#1b2b35" stroke="#ffffff" stroke-opacity=".13"/>
+    <text x="820" y="555" fill="#9eafb9" font-size="12" letter-spacing="2">QUICK ACCESS</text>
+    <text x="820" y="587" fill="#ffffff" font-size="18" font-weight="700">SETTINGS</text>
+    <text x="820" y="613" fill="#a9bac4" font-size="13">Display · Audio · Controls</text>
+    <path d="M1134 574h22m-8 -8l8 8l-8 8" stroke="#4ce0c1" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+</svg>
