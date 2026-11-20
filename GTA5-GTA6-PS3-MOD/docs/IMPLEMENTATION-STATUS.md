@@ -3,18 +3,19 @@ GTA V digital Europe, title ID NPEB01283, planned update 1.27, PS3 HEN.
 
 ## Artwork and tooling committed
 - Project manifest, asset manifest, path/hash/policy validators, regression tests, preview renderer, and GitHub Actions workflow definition.
-- Original 1280×720 SVG concepts: driving HUD, pause menu, loading screen, title screen, schematic map interface, phone interface, and settings screen.
-- All seven SVG assets are registered in `assets/asset-manifest.json` as source-only, not integrated, with update 1.27 compatibility unverified.
+- Eleven original 1280×720 SVG interface concepts: driving HUD, pause menu, loading screen, title screen, schematic map, phone, settings, mission briefing, vehicle gallery, save/load, and notification cards.
+- All eleven SVG assets are registered as source-only artwork. None is integrated into GTA V, and compatibility with update 1.27 remains unverified.
+- The preview renderer reads the asset registry and generates a PNG preview for every registered SVG. These previews are review artifacts only, not PS3 game textures.
 
-## What the new screens mean
-The map SVG is only a schematic interface mockup. It is not a recreation of the real San Andreas map, does not contain game geography, and is not navigable. The loading/title/phone/settings SVGs are also static concept artwork; they do not yet respond to controller input or load game data.
+## What the screens mean
+The map SVG is a schematic interface mockup. It is not a recreation of the real San Andreas map, contains no game geography, and is not navigable. The loading, title, phone, settings, briefing, gallery, save/load, notification, HUD, and pause-menu SVGs are static concept artwork; they do not respond to controller input or load live game data.
 
 ## Still required for a complete cosmetic mod
 1. Confirm the installed GTA V build and exact update 1.27 state for NPEB01283.
 2. Determine and validate the actual PS3-compatible texture/UI resource formats and archive layout for that exact build.
 3. Convert approved original artwork into correctly sized and encoded resources.
-4. Implement the real in-game map/minimap presentation using permitted, original assets; a static mockup is not enough.
-5. Integrate each screen into the correct game UI resources while preserving a rollback copy.
+4. Design a real in-game map/minimap presentation using permitted original assets; a static mockup is not enough.
+5. Integrate screens into the correct game UI resources while preserving a rollback copy.
 6. Build a distributable package containing only original mod files and a safe installer/manifest; never bundle the game, title update, keys, RAP/RIF, or copyrighted Rockstar assets.
 7. Run automated validation and test installation, boot, menus, map, loading, and gameplay on actual PS3 HEN hardware.
 
