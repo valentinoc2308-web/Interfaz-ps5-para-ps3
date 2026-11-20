@@ -1,23 +1,35 @@
 # PS3 compatibility baseline
 
-## Confirmed target
+## Confirmed project target
 - Platform: PlayStation 3
 - Console environment: HEN
 - GTA V title ID: **NPEB01283**
 - Region: Europe
 - Distribution: digital
+- Intended update: **1.27 (planned, not yet installed or verified)**
 
-## Still required before building installable files
-1. Exact GTA V update version/build shown by the console.
-2. Whether the game is currently clean or has REV/other modifications installed.
-3. A verified backup of the files that a module intends to replace.
-4. Hashes of original files to detect mismatches and support restoration.
+## Status
+The user expects to update the game to 1.27 soon but does not know the currently installed version. Therefore 1.27 is the development target, not a confirmed installed build. No binary patch, replacement archive, or installable PKG should be labeled compatible until the console installation is checked.
+
+## Verification checklist (when 1.27 is installed)
+1. Confirm the game launches normally before adding the mod.
+2. Confirm the title ID is NPEB01283.
+3. Confirm the displayed game update/version is 1.27.
+4. Record whether REV or any other game modification is installed.
+5. Back up the original game data and any files a module may touch.
+6. Record hashes for original files before making changes.
+7. Test one small, reversible, original-content module at a time.
+8. Verify boot, loading, gameplay, save behavior, and rollback before packaging.
 
 ## Why this matters
-Two installations with the same title ID may differ because of updates, modified files, or installed patches. A file replacement made for a different build can cause startup failures, black screens, crashes, or corrupted game data.
+Installations with the same title ID can differ because of updates, modified files, or installed patches. A replacement made for a different build can cause startup failures, black screens, crashes, or damaged game data.
 
 ## Performance constraints
-PS3 has a strict memory and CPU/GPU budget. Every added asset must be small, tested in-game, and measured for loading and frame-time impact. High-resolution PC assets and modern console assets are not suitable as-is.
+PS3 has a strict memory and CPU/GPU budget. Added assets must be small, tested in-game, and measured for loading and frame-time impact. High-resolution PC assets and modern-console assets are not suitable as-is.
 
 ## Test record
-No in-console compatibility test has been performed by this repository yet. Do not interpret the target declaration as a successful compatibility test.
+- Console version: pending
+- Title ID on console: pending verification
+- Clean launch on target version: not tested
+- Mod compatibility: not tested
+- Installable PKG: not available
