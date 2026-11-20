@@ -61,7 +61,7 @@ def main() -> None:
         if payload.resolve() not in resolved.parents:
             stop(f"payload path escapes PKGFILES: {path}")
     makefile = (INTEGRATION / "Makefile").read_text(encoding="utf-8")
-    if not re.search(r"(?m)^pkg\\s*:", makefile):
+    if not re.search(r"(?m)^pkg\s*:", makefile):
         stop("integration/Makefile must define a pkg target")
     print(f"PASS: {len(files)} original/licensed payload files are ready for PKG build.")
     print("Compatibility and hardware-test gates are marked passed.")
