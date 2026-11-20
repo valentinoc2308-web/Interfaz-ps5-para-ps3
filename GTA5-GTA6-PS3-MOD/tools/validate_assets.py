@@ -1,69 +1,92 @@
 #!/usr/bin/env python3
-"""Validate original SVG source assets without executing embedded content."""
+"""Validate registered original SVG assets without executing embedded content."""
+import json
 from pathlib import Path
-import sys
 import xml.etree.ElementTree as ET
 
 ROOT = Path(__file__).resolve().parents[1]
 ASSET_ROOT = ROOT / "assets"
-ASSET = ASSET_ROOT / "ui" / "modern_hud_concept.svg"
 ASSET_MANIFEST = ASSET_ROOT / "asset-manifest.json"
 SVG_NS = "{http://www.w3.org/2000/svg}"
+FORBIDDEN_ELEMENTS = {"script", "foreignobject", "iframe", "audio", "video"}
+
+
+def fail(message: str) -> None:
+    raise SystemExit(f"ERROR: {message}")
+
+
+def validate_svg(entry: dict) -> None:
+    relative = entry.get("path")
+    if not isinstance(relative, str) or not relative or relative.startswith(("/", "\\")) or ".." in Path(relative).parts:
+        fail(f"unsafe asset path: {relative!r}")
+    if entry.get("format") != "svg":
+        fail(f"unsupported asset format for {relative!r}")
+    if entry.get("license") != "Original project artwork":
+        fail(f"asset must be identified as original project artwork: {relative}")
+    if entry.get("integration") != "source_only_not_in_game":
+        fail(f"unverified asset cannot be marked as integrated: {relative}")
+    if entry.get("target_update") != "1.27" or entry.get("target_status") != "unverified":
+        fail(f"asset target must remain 1.27 and unverified: {relative}")
+
+    asset_path = (ASSET_ROOT / relative).resolve()
+    try:
+        asset_path.relative_to(ASSET_ROOT.resolve())
+    except ValueError:
+        fail(f"asset path escapes assets directory: {relative}")
+    if not asset_path.is_file():
+        fail(f"missing asset file: {relative}")
+
+    try:
+        root = ET.parse(asset_path).getroot()
+    except (ET.ParseError, OSError) as exc:
+        fail(f"invalid SVG XML in {relative}: {exc}")
+    if root.tag != f"{SVG_NS}svg":
+        fail(f"root element is not SVG: {relative}")
+
+    width = entry.get("width")
+    height = entry.get("height")
+    if root.attrib.get("width") != str(width) or root.attrib.get("height") != str(height):
+        fail(f"SVG dimensions do not match registry: {relative}")
+    if root.attrib.get("viewBox") != f"0 0 {width} {height}":
+        fail(f"unexpected SVG viewBox: {relative}")
+
+    for element in root.iter():
+        local = element.tag.rsplit("}", 1)[-1].lower()
+        if local in FORBIDDEN_ELEMENTS:
+            fail(f"active/embedded element is not allowed in {relative}: {local}")
+        for attr, value in element.attrib.items():
+            attr_name = attr.rsplit("}", 1)[-1].lower()
+            if attr_name.startswith("on"):
+                fail(f"event handler attribute is not allowed in {relative}: {attr}")
+            if attr_name in {"href", "src"} and ("://" in value or value.startswith("data:")):
+                fail(f"external or embedded resource is not allowed in {relative}: {attr}")
 
 
 def main() -> None:
     if not ASSET_MANIFEST.is_file():
-        raise SystemExit(f"ERROR: missing asset manifest: {ASSET_MANIFEST}")
+        fail(f"missing asset manifest: {ASSET_MANIFEST}")
     try:
-        import json
         registry = json.loads(ASSET_MANIFEST.read_text(encoding="utf-8"))
     except (OSError, ValueError) as exc:
-        raise SystemExit(f"ERROR: invalid asset manifest: {exc}")
+        fail(f"invalid asset manifest: {exc}")
     if not isinstance(registry, dict) or registry.get("schema_version") != 1:
-        raise SystemExit("ERROR: unsupported asset manifest schema.")
+        fail("unsupported asset manifest schema.")
+
     assets = registry.get("assets")
-    if not isinstance(assets, list) or len(assets) != 1:
-        raise SystemExit("ERROR: asset manifest must contain exactly one registered original asset.")
-    entry = assets[0]
-    if not isinstance(entry, dict) or entry.get("id") != "modern_hud_concept":
-        raise SystemExit("ERROR: HUD asset registry entry is missing or invalid.")
-    if entry.get("path") != "ui/modern_hud_concept.svg" or entry.get("format") != "svg":
-        raise SystemExit("ERROR: HUD asset path/format does not match the source file.")
-    if entry.get("width") != 1280 or entry.get("height") != 720 or entry.get("alpha") is not True:
-        raise SystemExit("ERROR: HUD registry dimensions/alpha metadata are invalid.")
-    if entry.get("target_update") != "1.27" or entry.get("target_status") != "unverified":
-        raise SystemExit("ERROR: asset target must remain 1.27 and unverified until tested.")
-    if entry.get("license") != "Original project artwork":
-        raise SystemExit("ERROR: HUD asset must be identified as original project artwork.")
-    if entry.get("integration") != "source_only_not_in_game":
-        raise SystemExit("ERROR: unverified asset cannot be marked as integrated.")
-    if not ASSET.is_file():
-        raise SystemExit(f"ERROR: missing SVG asset: {ASSET}")
-    try:
-        root = ET.parse(ASSET).getroot()
-    except (ET.ParseError, OSError) as exc:
-        raise SystemExit(f"ERROR: invalid SVG XML: {exc}")
-    if root.tag != f"{SVG_NS}svg":
-        raise SystemExit("ERROR: root element is not SVG.")
-    if root.attrib.get("width") != "1280" or root.attrib.get("height") != "720":
-        raise SystemExit("ERROR: HUD source must be 1280x720.")
-    if root.attrib.get("viewBox") != "0 0 1280 720":
-        raise SystemExit("ERROR: unexpected SVG viewBox.")
+    if not isinstance(assets, list) or not assets:
+        fail("asset manifest must contain at least one registered asset.")
+    seen = set()
+    for entry in assets:
+        if not isinstance(entry, dict):
+            fail("every asset registry entry must be an object.")
+        asset_id = entry.get("id")
+        if not isinstance(asset_id, str) or not asset_id or asset_id in seen:
+            fail(f"missing or duplicate asset id: {asset_id!r}")
+        seen.add(asset_id)
+        validate_svg(entry)
 
-    forbidden = {"script", "foreignObject", "iframe", "audio", "video"}
-    for element in root.iter():
-        local = element.tag.rsplit("}", 1)[-1].lower()
-        if local in {name.lower() for name in forbidden}:
-            raise SystemExit(f"ERROR: active/embedded element is not allowed: {local}")
-        for attr, value in element.attrib.items():
-            attr_name = attr.rsplit("}", 1)[-1].lower()
-            if attr_name.startswith("on"):
-                raise SystemExit(f"ERROR: event handler attribute is not allowed: {attr}")
-            if attr_name in {"href", "src"} and ("://" in value or value.startswith("data:")):
-                raise SystemExit(f"ERROR: external or embedded resource is not allowed: {attr}")
-
-    print("PASS: asset registry and original HUD SVG are valid, 1280x720, and contain no active/external content.")
-    print("NOTE: SVG is source artwork only; it is not a PS3-native texture or installed game mod.")
+    print(f"PASS: {len(assets)} registered original SVG assets validated; no active/external content found.")
+    print("NOTE: Artwork is source only; it is not a PS3-native texture or installed game mod.")
 
 
 if __name__ == "__main__":
