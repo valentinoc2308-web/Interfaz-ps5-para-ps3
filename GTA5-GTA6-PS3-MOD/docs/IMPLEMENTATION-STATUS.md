@@ -30,3 +30,7 @@ No game archive has been patched. No native PS3 UI resource has been built. No a
 
 ## Release gate
 Do not label the project playable, installable, compatible, or complete until the exact target build is verified, all payload resources pass validation, and the package is tested on real PS3 hardware. The current repository is an artwork/tooling prototype, not the finished mod.
+
+- Follow-up research (2026-11-20) inspected the RAGE Console Texture Editor Python port: it documents PS3 CTD read/edit/repack support, but explicitly marks PS3 rebuild experimental and not hardware-confirmed. Its RPF browser also depends on a user-supplied key for encrypted archives. This is now recorded as a candidate for a disposable unchanged round-trip test, not a validated build dependency. See [RESOURCE-FORMAT-RESEARCH.md](RESOURCE-FORMAT-RESEARCH.md).
+- Follow-up research inspected a public PS3 GTA V tool collection documenting a Windows workflow with LibertyV, console texture editing, RASM/ASM tools, and an update 1.27 working copy. This is a discovery reference only; it does not prove NPEB01283 compatibility or provide a tested integration for this project.
+- Clarified that PS3DEV/PSL1GHT can build native PS3 homebrew packages, but does not itself convert the SVG artwork into GTA V resources or define a valid GTA V installation payload.
