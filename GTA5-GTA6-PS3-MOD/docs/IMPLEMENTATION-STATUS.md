@@ -6,6 +6,7 @@ GTA V digital Europe, title ID NPEB01283, planned update 1.27, PS3 HEN.
 - SVG validator hardened to reject DTD/entity declarations, non-local resource references, external CSS URLs/imports, duplicate registry paths, and invalid/excessive dimensions.
 - CSS safety checks are centralized and regression-tested for local SVG fragments, external URL forms, and case-insensitive `@import` declarations.
 - Resource research found a published PS3 HUD example using `update.rpf/common/data/ui/hudcolor.dat` and `.gfx` files in `scaleform_generic.rpf`; that example is explicitly for update 1.12, so it is only a lead and does not establish 1.27 compatibility. See [RESOURCE-FORMAT-RESEARCH.md](RESOURCE-FORMAT-RESEARCH.md).
+- New toolchain research identifies PS3 GTA V texture dictionaries as `.ctd` (`7CSR`, big-endian, zlib), not PC `.ytd`. A candidate editor claims CTD editing/repacking but labels PS3 rebuild experimental and not hardware-confirmed. See [PS3-CTD-TOOLCHAIN.md](PS3-CTD-TOOLCHAIN.md).
 - Twelve original 1280×720 SVG interface concepts: driving HUD, pause menu, loading screen, title screen, schematic map, phone, settings, mission briefing, vehicle gallery, save/load, notification cards, and controller interaction prompts.
 - All twelve SVG assets are registered as source-only artwork. None is integrated into GTA V, and compatibility with update 1.27 remains unverified.
 - The preview renderer reads the asset registry and generates a PNG preview for every registered SVG. These previews are review artifacts only, not PS3 game textures.
@@ -15,7 +16,7 @@ The map SVG is a schematic interface mockup. It is not a recreation of the real 
 
 ## Still required for a complete cosmetic mod
 1. Confirm the installed GTA V build and exact update 1.27 state for NPEB01283.
-2. Determine and validate the actual PS3-compatible texture/UI resource formats and archive layout for that exact build.
+2. Determine and validate the actual PS3-compatible texture/UI resource formats and archive layout for that exact build. In particular, verify a CTD extract/rebuild round-trip; the available candidate tool's PS3 write path is experimental.
 3. Convert approved original artwork into correctly sized and encoded resources.
 4. Design a real in-game map/minimap presentation using permitted original assets; a static mockup is not enough.
 5. Integrate screens into the correct game UI resources while preserving a rollback copy.
