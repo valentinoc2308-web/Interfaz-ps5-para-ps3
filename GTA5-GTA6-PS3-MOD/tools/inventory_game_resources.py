@@ -91,7 +91,7 @@ def main() -> int:
             "Do not upload or publish copyrighted game files; share only this metadata report if appropriate.",
         ],
     }
-    rendered = json.dumps(report, indent=2, ensure_ascii=False) + "\\n"
+    rendered = json.dumps(report, indent=2, ensure_ascii=False) + "\n"
     if args.output:
         args.output.write_text(rendered, encoding="utf-8")
         print(f"Wrote {len(records)} candidate entries to {args.output}")
