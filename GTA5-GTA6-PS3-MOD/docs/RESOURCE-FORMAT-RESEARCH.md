@@ -11,9 +11,21 @@ That publication explicitly labels its PS3 release as game version **1.12**, not
 
 Source: https://www.gta5-mods.com/misc/pre-release-hud-ps3-1-12
 
-A PS3 GTA V modding-toolkit repository separately documents a workflow involving an update 1.27 working copy of `update.rpf`, a LibertyV RPF editor, a console texture editor, and RASM script tools. This is useful as a lead for the general archive/script toolchain, but its README is not a format specification and does not prove that any particular asset or script works with this project's target title ID and HEN setup.
+A PS3 GTA V modding-toolkit repository documents a workflow involving an update 1.27 working copy of `update.rpf`, a LibertyV RPF editor, a console texture editor, and RASM script tools. It is useful as a lead for the general archive/script toolchain, but its README does not prove that any particular asset or script works with this project's target title ID and HEN setup.
 
 Source: https://github.com/FranCangelDev/GTA-V-Modding-Files-PS3
+
+## Newly identified texture-editor candidate
+
+The public RAGE Console Texture Editor Python port advertises direct reading and editing of PS3 `.ctd` texture dictionaries, RPF7 browsing, texture replacement, mipmap generation, and repacking. It documents PS3 CTD as big-endian with zlib compression.
+
+Critical caveat: the same project explicitly labels PS3 CTD conversion/rebuild as **experimental** and says RSX behaviour has not been confirmed in-game on real PS3 hardware. The project reports some in-game verification on Xbox 360, which must not be mistaken for PS3 verification. This is therefore a candidate for a disposable proof-of-concept only, not a validated dependency or a ready-made solution.
+
+Source: https://github.com/SoLjAhh/RAGE-Console-Texture-Editor-Python-Port-
+
+A separate texture toolkit lists PS3 CTD support as read-only, reinforcing that write support is not universal across tools.
+
+Source: https://github.com/Hancapo/texfury
 
 ## Consequence for this project
 
@@ -26,19 +38,19 @@ The twelve project SVG files are artwork sources only. They cannot be copied int
 
 ## Safe implementation sequence
 
-1. Obtain a user-owned copy of the exact installed NPEB01283 game/update files and verify the update from the console.
-2. Inventory the matching `update.rpf` and relevant nested archives without modifying them.
+1. Verify the exact installed title ID and game update on the user's own console.
+2. Work only from a user-owned copy of the exact matching game/update files; inventory `update.rpf` and relevant nested archives without modifying originals.
 3. Identify the actual HUD/GFX and texture entries in that exact build; record names, sizes, hashes, and archive paths.
-4. Establish a round-trip test on a disposable copy: extract one known resource, parse it, rebuild it unchanged, and confirm the archive opens.
-5. Only then build one small original HUD test resource. Do not start by replacing every screen.
-6. Verify on hardware before expanding to loading, phone, settings, map, or other screens.
+4. Establish a round-trip test on a disposable copy: extract one known CTD, parse it, save it unchanged, and compare its structure; separately confirm the RPF archive can be reopened.
+5. Only after a successful round-trip, build one small original HUD/texture test resource. Do not start by replacing every screen.
+6. Verify the isolated change on PS3 hardware before expanding to loading, phone, settings, map, or other screens.
 
 ## Current status / hard blockers
 
 - Exact installed game update: **not supplied or verified**.
-- A 1.27 archive inventory from the user's own NPEB01283 installation: **not supplied**.
+- A matching archive inventory from the user's own NPEB01283 installation: **not supplied**.
 - Native Scaleform/GFX authoring and round-trip toolchain: **not integrated or validated in this repository**.
-- PS3 texture-dictionary conversion: **not implemented**.
+- PS3 CTD write/rebuild path: **candidate tool identified, but experimental and not hardware-verified**.
 - In-game map implementation: **not implemented**.
 - PKG installer and PS3 test: **not implemented / not run**.
 
