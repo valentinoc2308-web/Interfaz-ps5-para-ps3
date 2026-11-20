@@ -1,0 +1,48 @@
+{
+  "schema_version": 1,
+  "project": "GTA V to GTA VI Inspired - PS3",
+  "release": "0.1.0-dev",
+  "target": {
+    "platform": "PS3",
+    "title_id": "NPEB01283",
+    "region": "Europe",
+    "game_update": "1.27",
+    "update_status": "planned_unverified",
+    "console_environment": "HEN"
+  },
+  "mode": "offline_single_player_only",
+  "distribution_policy": {
+    "include_rockstar_game_data": false,
+    "include_original_game_executables": false,
+    "include_third_party_assets_without_permission": false,
+    "include_online_cheat_or_recovery_features": false
+  },
+  "modules": [
+    {
+      "id": "visual_atmosphere",
+      "name": "Modern Los Santos atmosphere",
+      "status": "design",
+      "scope": "Original visual configuration and licensed assets only"
+    },
+    {
+      "id": "vehicle_appearance",
+      "name": "Modern vehicle appearance pack",
+      "status": "design",
+      "scope": "Original or properly licensed cosmetic assets only"
+    },
+    {
+      "id": "interface",
+      "name": "Modernized interface",
+      "status": "design",
+      "scope": "Offline, non-competitive interface changes"
+    },
+    {
+      "id": "world_details",
+      "name": "World detail pass",
+      "status": "design",
+      "scope": "Small assets designed around PS3 memory and performance limits"
+    }
+  ],
+  "payload_directory": "payload",
+  "files": []
+}
