@@ -38,5 +38,5 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: gta5-ps3-hud-preview
-          path: GTA5-GTA6-PS3-MOD/build/modern_hud_concept.png
+          path: GTA5-GTA6-PS3-MOD/build/*.png
           if-no-files-found: error
