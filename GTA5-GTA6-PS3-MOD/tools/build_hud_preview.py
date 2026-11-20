@@ -5,6 +5,7 @@ Requires CairoSVG. Outputs are design previews only, not PS3-native textures.
 """
 import json
 import re
+import struct
 from pathlib import Path
 import cairosvg
 
@@ -52,7 +53,14 @@ def main() -> None:
         )
         if not output.is_file() or output.stat().st_size < 1024:
             raise SystemExit(f"PNG preview was not generated correctly: {output}")
-        print(f"Rendered preview: {output} ({output.stat().st_size} bytes)")
+        with output.open("rb") as stream:
+            header = stream.read(24)
+        if len(header) != 24 or header[:8] != b"\\x89PNG\\r\\n\\x1a\\n":
+            raise SystemExit(f"Invalid PNG signature: {output}")
+        png_width, png_height = struct.unpack(">II", header[16:24])
+        if png_width != int(entry["width"]) or png_height != int(entry["height"]):
+            raise SystemExit(f"Unexpected PNG dimensions for {output}: {png_width}x{png_height}")
+        print(f"Rendered and verified preview: {output} ({png_width}x{png_height}, {output.stat().st_size} bytes)")
 
     print("These PNG files are visual previews, not PS3 game textures or a PKG.")
 
