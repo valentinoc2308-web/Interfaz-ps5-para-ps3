@@ -23,7 +23,7 @@
     <text x="936" y="66" fill="#a7b7c2" font-size="13" letter-spacing="2.5">SAN ANDREAS</text>
     <text x="936" y="96" fill="#ffffff" font-size="23" font-weight="700">FRIDAY</text>
     <text x="936" y="122" fill="#dce8ed" font-size="15">21:35  ·  CLEAR</text>
-    <text x="1198" y="73" fill="#4ce0c1" font-size="14" text-anchor="end">ONLINE</text>
+    <text x="1198" y="73" fill="#4ce0c1" font-size="14" text-anchor="end">STORY MODE</text>
     <circle cx="1209" cy="68" r="4" fill="#4ce0c1"/>
   </g>
 
