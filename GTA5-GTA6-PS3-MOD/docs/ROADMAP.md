@@ -21,6 +21,8 @@ A feature is not complete until its files exist, compatibility is documented, an
 
 ## Phase 2 — First playable conversion modules
 - [ ] Original visual/timecycle configuration, if supported by the target build.
+- [x] Create original HUD and pause-menu interface source artwork with automated previews.
+- [ ] Convert interface artwork to a verified PS3-supported texture format and test it in-game.
 - [ ] One small original or licensed cosmetic vehicle asset, only after format and memory tests.
 - [ ] One small world-detail/prop asset, only after format and memory tests.
 - [ ] Conservative handling and traffic tuning where supported.
