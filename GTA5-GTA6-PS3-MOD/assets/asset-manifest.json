@@ -12,6 +12,18 @@
       "integration": "source_only_not_in_game",
       "target_update": "1.27",
       "target_status": "unverified"
+    },
+    {
+      "id": "modern_pause_menu",
+      "path": "ui/modern_pause_menu.svg",
+      "format": "svg",
+      "width": 1280,
+      "height": 720,
+      "alpha": false,
+      "license": "Original project artwork",
+      "integration": "source_only_not_in_game",
+      "target_update": "1.27",
+      "target_status": "unverified"
     }
   ]
 }
