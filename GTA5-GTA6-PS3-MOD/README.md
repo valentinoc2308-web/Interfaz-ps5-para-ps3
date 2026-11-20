@@ -11,7 +11,7 @@ This is an original, compatibility-focused conversion project. It aims to bring 
 
 - Machine-readable target and module manifest: [mod/manifest.json](mod/manifest.json).
 - Payload validator with path-safety and SHA-256 checks: [tools/validate_project.py](tools/validate_project.py).
-- Regression tests: [tools/test_validate_project.py](tools/test_validate_project.py).\n- Read-only resource inventory for an already-extracted user-owned copy: [tools/inventory_game_resources.py](tools/inventory_game_resources.py); it records candidate RPF/CTD/GFX/HUD-colour paths, sizes, and hashes without modifying game files.
+- Regression tests: [tools/test_validate_project.py](tools/test_validate_project.py).\n- Read-only resource inventory for an already-extracted user-owned copy: [tools/inventory_game_resources.py](tools/inventory_game_resources.py); it records candidate RPF/CTD/GFX/HUD-colour paths, sizes, and hashes without modifying game files. Spanish preparation guide: [docs/GUIA-PREPARACION-RECURSOS-ES.md](docs/GUIA-PREPARACION-RECURSOS-ES.md).
 - Original HUD and pause-menu source artwork: [HUD](assets/ui/modern_hud_concept.svg) · [Pause menu](assets/ui/modern_pause_menu.svg), registered in [assets/asset-manifest.json](assets/asset-manifest.json).
 - SVG validation and PNG preview build: [tools/validate_assets.py](tools/validate_assets.py), [tools/build_hud_preview.py](tools/build_hud_preview.py).
 - Automated Python checks and HUD preview artifact: [.github/workflows/gta5-ps3-mod-checks.yml](../../.github/workflows/gta5-ps3-mod-checks.yml).
