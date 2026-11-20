@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Validate registered original SVG assets without executing embedded content."""
 import json
+import re
 from pathlib import Path
 import xml.etree.ElementTree as ET
 
@@ -17,7 +18,7 @@ def fail(message: str) -> None:
 
 def validate_svg(entry: dict) -> None:
     relative = entry.get("path")
-    if not isinstance(relative, str) or not relative or relative.startswith(("/", "\\")) or ".." in Path(relative).parts:
+    if not isinstance(relative, str) or not relative or relative.startswith(("/", "\\")) or "\\" in relative or ".." in Path(relative).parts:
         fail(f"unsafe asset path: {relative!r}")
     if entry.get("format") != "svg":
         fail(f"unsupported asset format for {relative!r}")
@@ -80,8 +81,8 @@ def main() -> None:
         if not isinstance(entry, dict):
             fail("every asset registry entry must be an object.")
         asset_id = entry.get("id")
-        if not isinstance(asset_id, str) or not asset_id or asset_id in seen:
-            fail(f"missing or duplicate asset id: {asset_id!r}")
+        if not isinstance(asset_id, str) or not re.fullmatch(r"[a-z0-9_]+", asset_id) or asset_id in seen:
+            fail(f"missing, unsafe, or duplicate asset id: {asset_id!r}")
         seen.add(asset_id)
         validate_svg(entry)
 
