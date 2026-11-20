@@ -19,7 +19,9 @@ def main() -> None:
         registry = json.loads(ASSET_MANIFEST.read_text(encoding="utf-8"))
     except (OSError, ValueError) as exc:
         raise SystemExit(f"ERROR: invalid asset manifest: {exc}")
-    assets = registry.get("assets") if isinstance(registry, dict) else None
+    if not isinstance(registry, dict) or registry.get("schema_version") != 1:
+        raise SystemExit("ERROR: unsupported asset manifest schema.")
+    assets = registry.get("assets")
     if not isinstance(assets, list) or len(assets) != 1:
         raise SystemExit("ERROR: asset manifest must contain exactly one registered original asset.")
     entry = assets[0]
@@ -27,6 +29,10 @@ def main() -> None:
         raise SystemExit("ERROR: HUD asset registry entry is missing or invalid.")
     if entry.get("path") != "ui/modern_hud_concept.svg" or entry.get("format") != "svg":
         raise SystemExit("ERROR: HUD asset path/format does not match the source file.")
+    if entry.get("width") != 1280 or entry.get("height") != 720 or entry.get("alpha") is not True:
+        raise SystemExit("ERROR: HUD registry dimensions/alpha metadata are invalid.")
+    if entry.get("target_update") != "1.27" or entry.get("target_status") != "unverified":
+        raise SystemExit("ERROR: asset target must remain 1.27 and unverified until tested.")
     if entry.get("license") != "Original project artwork":
         raise SystemExit("ERROR: HUD asset must be identified as original project artwork.")
     if entry.get("integration") != "source_only_not_in_game":
