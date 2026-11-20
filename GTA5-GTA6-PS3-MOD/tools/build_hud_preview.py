@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
-"""Render all registered original SVG interface assets into PNG previews.
+"""Render registered original SVG interface assets into PNG previews.
 
 Requires CairoSVG. Outputs are design previews only, not PS3-native textures.
 """
 import json
+import re
 from pathlib import Path
 import cairosvg
 
@@ -21,14 +22,28 @@ def main() -> None:
     OUTPUT_ROOT.mkdir(parents=True, exist_ok=True)
 
     for entry in entries:
-        source = (ASSET_ROOT / entry["path"]).resolve()
+        asset_id = entry.get("id", "")
+        relative = entry.get("path", "")
+        if not isinstance(asset_id, str) or not re.fullmatch(r"[a-z0-9_]+", asset_id):
+            raise SystemExit(f"Unsafe asset id: {asset_id!r}")
+        if (
+            not isinstance(relative, str)
+            or not relative
+            or "\\" in relative
+            or relative.startswith("/")
+            or ".." in Path(relative).parts
+        ):
+            raise SystemExit(f"Unsafe asset path: {relative!r}")
+
+        source = (ASSET_ROOT / relative).resolve()
         try:
             source.relative_to(ASSET_ROOT.resolve())
         except ValueError:
-            raise SystemExit(f"Unsafe asset path in registry: {entry['path']}")
+            raise SystemExit(f"Asset path escapes assets directory: {relative}")
         if not source.is_file():
             raise SystemExit(f"Missing source artwork: {source}")
-        output = OUTPUT_ROOT / f"{entry['id']}.png"
+
+        output = OUTPUT_ROOT / f"{asset_id}.png"
         cairosvg.svg2png(
             url=str(source),
             write_to=str(output),
