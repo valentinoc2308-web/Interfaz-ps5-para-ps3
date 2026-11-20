@@ -6,6 +6,9 @@ GTA V digital Europe, title ID NPEB01283, planned update 1.27, PS3 HEN.
 ## Initial implementation committed
 - Added a machine-readable project manifest describing the offline, cosmetic-only scope.
 - Added a Python validation tool for manifest structure, safe payload paths, distribution policy, and SHA-256 integrity.
+- Added an original 1280×720 transparent HUD concept as editable SVG source artwork.
+- Added SVG safety/dimension validation and a reproducible CairoSVG PNG preview build.
+- Added GitHub Actions checks that run the Python tests, validate the manifest and SVG, and publish the HUD preview as a workflow artifact.
 - Added explicit release gates so an unverified game build cannot be described as compatible.
 
 ## Planned content modules
@@ -20,7 +23,7 @@ GTA V digital Europe, title ID NPEB01283, planned update 1.27, PS3 HEN.
 - Online recovery, cheating, anti-ban claims, or features that affect other players.
 
 ## Build status
-This is the first source/tooling implementation, not a playable mod. The manifest and validator are project infrastructure. No game archive has been patched, no PS3 binary has been compiled, and no PKG has been built or tested.
+This is an early source/tooling and artwork implementation, not a playable mod. The HUD is original source artwork and a preview only; it is not converted to a PS3-native texture or integrated into the game. No game archive has been patched, no PS3 binary has been compiled, and no PKG has been built or tested.
 
 ## Release gates
 A release cannot be marked installable until the exact 1.27 installation is verified, every payload asset is licensed and hashed, the platform-specific packaging process is independently validated, and the result is tested on real PS3 hardware. The project must preserve a clean rollback path.
