@@ -55,7 +55,7 @@ def main() -> None:
             raise SystemExit(f"PNG preview was not generated correctly: {output}")
         with output.open("rb") as stream:
             header = stream.read(24)
-        if len(header) != 24 or header[:8] != b"\\x89PNG\\r\\n\\x1a\\n":
+        if len(header) != 24 or header[:8] != b"\x89PNG\r\n\x1a\n":
             raise SystemExit(f"Invalid PNG signature: {output}")
         png_width, png_height = struct.unpack(">II", header[16:24])
         if png_width != int(entry["width"]) or png_height != int(entry["height"]):
