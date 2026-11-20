@@ -22,7 +22,7 @@ jobs:
         with:
           python-version: "3.x"
       - name: Compile-check Python tools
-        run: python -m py_compile GTA5-GTA6-PS3-MOD/tools/validate_project.py GTA5-GTA6-PS3-MOD/tools/test_validate_project.py GTA5-GTA6-PS3-MOD/tools/validate_assets.py GTA5-GTA6-PS3-MOD/tools/test_validate_assets.py GTA5-GTA6-PS3-MOD/tools/build_hud_preview.py GTA5-GTA6-PS3-MOD/tools/inventory_game_resources.py GTA5-GTA6-PS3-MOD/tools/test_inventory_game_resources.py
+        run: python -m py_compile GTA5-GTA6-PS3-MOD/tools/validate_project.py GTA5-GTA6-PS3-MOD/tools/test_validate_project.py GTA5-GTA6-PS3-MOD/tools/validate_assets.py GTA5-GTA6-PS3-MOD/tools/test_validate_assets.py GTA5-GTA6-PS3-MOD/tools/build_hud_preview.py GTA5-GTA6-PS3-MOD/tools/inventory_game_resources.py GTA5-GTA6-PS3-MOD/tools/test_inventory_game_resources.py GTA5-GTA6-PS3-MOD/tools/package_release_gate.py GTA5-GTA6-PS3-MOD/tools/test_package_release_gate.py
       - name: Install SVG renderer
         run: python -m pip install CairoSVG
       - name: Run regression tests
