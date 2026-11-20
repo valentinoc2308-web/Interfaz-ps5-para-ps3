@@ -1,4 +1,4 @@
-name: Build PKG
+name: Nova Launcher PS3 PKG (not GTA V)
 
 on:
   workflow_dispatch:
