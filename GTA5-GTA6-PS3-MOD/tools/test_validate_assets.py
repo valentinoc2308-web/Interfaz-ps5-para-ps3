@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Regression tests for the registered original UI artwork."""
+import importlib.util
 import json
 import subprocess
 import sys
@@ -10,6 +11,33 @@ import xml.etree.ElementTree as ET
 ROOT = Path(__file__).resolve().parents[1]
 REGISTRY = ROOT / "assets" / "asset-manifest.json"
 VALIDATOR = Path(__file__).with_name("validate_assets.py")
+SPEC = importlib.util.spec_from_file_location("validate_assets", VALIDATOR)
+validator = importlib.util.module_from_spec(SPEC)
+SPEC.loader.exec_module(validator)
+
+
+class CssSafetyTests(unittest.TestCase):
+    def test_allows_local_fragment_references(self):
+        validator.validate_css("fill: url(#local-gradient);", "test.svg", "style")
+
+    def test_rejects_external_css_url(self):
+        for css in (
+            "background: url(https://example.invalid/image.png);",
+            'background: url("https://example.invalid/image.png");',
+            "background: url(remote-image.png);",
+        ):
+            with self.subTest(css=css):
+                with self.assertRaises(SystemExit):
+                    validator.validate_css(css, "test.svg", "style")
+
+    def test_rejects_css_imports_case_insensitively(self):
+        for css in (
+            '@import url("https://example.invalid/theme.css");',
+            '@IMPORT "theme.css";',
+        ):
+            with self.subTest(css=css):
+                with self.assertRaises(SystemExit):
+                    validator.validate_css(css, "test.svg", "<style>")
 
 
 class UiAssetTests(unittest.TestCase):
