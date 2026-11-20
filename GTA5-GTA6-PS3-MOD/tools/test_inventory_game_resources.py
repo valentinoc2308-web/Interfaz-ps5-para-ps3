@@ -37,6 +37,11 @@ class InventoryTests(unittest.TestCase):
     def test_can_skip_hashes(self):
         found = tool.inventory(self.root, include_hashes=False)
         self.assertTrue(all("sha256" not in item for item in found))
+    def test_records_first_16_header_bytes(self):
+        found = tool.inventory(self.root, include_hashes=False)
+        archive = next(item for item in found if item["path"] == "update.rpf")
+        self.assertEqual(archive["header_16_bytes_hex"], b"sample archive".hex())
+        self.assertLessEqual(len(archive["header_16_bytes_hex"]), 32)
 
     def test_rejects_non_directory(self):
         file_path = self.root / "update.rpf"
