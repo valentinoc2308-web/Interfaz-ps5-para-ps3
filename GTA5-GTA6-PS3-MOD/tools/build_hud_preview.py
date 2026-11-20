@@ -1,30 +1,45 @@
 #!/usr/bin/env python3
-"""Render the original HUD SVG into a transparent PNG preview.
+"""Render all registered original SVG interface assets into PNG previews.
 
-Requires CairoSVG. This is a design preview only, not a PS3-native texture.
+Requires CairoSVG. Outputs are design previews only, not PS3-native textures.
 """
+import json
 from pathlib import Path
 import cairosvg
 
 ROOT = Path(__file__).resolve().parents[1]
-SOURCE = ROOT / "assets" / "ui" / "modern_hud_concept.svg"
-OUTPUT = ROOT / "build" / "modern_hud_concept.png"
+ASSET_ROOT = ROOT / "assets"
+REGISTRY = ASSET_ROOT / "asset-manifest.json"
+OUTPUT_ROOT = ROOT / "build"
 
 
 def main() -> None:
-    if not SOURCE.is_file():
-        raise SystemExit(f"Missing source artwork: {SOURCE}")
-    OUTPUT.parent.mkdir(parents=True, exist_ok=True)
-    cairosvg.svg2png(
-        url=str(SOURCE),
-        write_to=str(OUTPUT),
-        output_width=1280,
-        output_height=720,
-    )
-    if not OUTPUT.is_file() or OUTPUT.stat().st_size < 1024:
-        raise SystemExit("PNG preview was not generated correctly.")
-    print(f"Rendered preview: {OUTPUT} ({OUTPUT.stat().st_size} bytes)")
-    print("This PNG is a visual preview, not a PS3 game texture or PKG.")
+    manifest = json.loads(REGISTRY.read_text(encoding="utf-8"))
+    entries = manifest.get("assets", [])
+    if not entries:
+        raise SystemExit("No registered UI assets to render.")
+    OUTPUT_ROOT.mkdir(parents=True, exist_ok=True)
+
+    for entry in entries:
+        source = (ASSET_ROOT / entry["path"]).resolve()
+        try:
+            source.relative_to(ASSET_ROOT.resolve())
+        except ValueError:
+            raise SystemExit(f"Unsafe asset path in registry: {entry['path']}")
+        if not source.is_file():
+            raise SystemExit(f"Missing source artwork: {source}")
+        output = OUTPUT_ROOT / f"{entry['id']}.png"
+        cairosvg.svg2png(
+            url=str(source),
+            write_to=str(output),
+            output_width=int(entry["width"]),
+            output_height=int(entry["height"]),
+        )
+        if not output.is_file() or output.stat().st_size < 1024:
+            raise SystemExit(f"PNG preview was not generated correctly: {output}")
+        print(f"Rendered preview: {output} ({output.stat().st_size} bytes)")
+
+    print("These PNG files are visual previews, not PS3 game textures or a PKG.")
 
 
 if __name__ == "__main__":
