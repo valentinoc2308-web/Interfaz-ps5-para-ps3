@@ -1,0 +1,17 @@
+{
+  "schema_version": 1,
+  "assets": [
+    {
+      "id": "modern_hud_concept",
+      "path": "ui/modern_hud_concept.svg",
+      "format": "svg",
+      "width": 1280,
+      "height": 720,
+      "alpha": true,
+      "license": "Original project artwork",
+      "integration": "source_only_not_in_game",
+      "target_update": "1.27",
+      "target_status": "unverified"
+    }
+  ]
+}
