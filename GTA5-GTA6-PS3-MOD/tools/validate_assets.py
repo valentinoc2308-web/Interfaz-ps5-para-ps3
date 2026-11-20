@@ -18,6 +18,14 @@ def fail(message: str) -> None:
     raise SystemExit(f"ERROR: {message}")
 
 
+def validate_css(css: str, relative: str, context: str) -> None:
+    """Reject CSS imports and non-local URL references in SVG styles."""
+    if EXTERNAL_URL.search(css) or re.search(r"url\s*\(\s*(?![#'\"])", css, re.IGNORECASE):
+        fail(f"external CSS resource is not allowed in {relative}: {context}")
+    if re.search(r"@import\b", css, re.IGNORECASE):
+        fail(f"CSS imports are not allowed in {relative}: {context}")
+
+
 def validate_svg(entry: dict) -> None:
     relative = entry.get("path")
     if not isinstance(relative, str) or not relative or relative.startswith(("/", "\\")) or "\\" in relative or ".." in Path(relative).parts:
@@ -63,18 +71,15 @@ def validate_svg(entry: dict) -> None:
         if local in FORBIDDEN_ELEMENTS:
             fail(f"active/embedded element is not allowed in {relative}: {local}")
         if local == "style" and element.text:
-            if EXTERNAL_URL.search(element.text) or re.search(r"url\s*\(\s*(?![#'\"])", element.text, re.IGNORECASE):
-                fail(f"external CSS resource is not allowed in {relative}: <style>")
-            if re.search(r"@import\\b", element.text, re.IGNORECASE):
-                fail(f"CSS imports are not allowed in {relative}")
+            validate_css(element.text, relative, "<style>")
         for attr, value in element.attrib.items():
             attr_name = attr.rsplit("}", 1)[-1].lower()
             if attr_name.startswith("on"):
                 fail(f"event handler attribute is not allowed in {relative}: {attr}")
             if attr_name in {"href", "src"} and value and not value.startswith("#"):
                 fail(f"non-local resource reference is not allowed in {relative}: {attr}")
-            if attr_name == "style" and (EXTERNAL_URL.search(value) or re.search(r"url\s*\(\s*(?![#'\"])", value, re.IGNORECASE)):
-                fail(f"external CSS resource is not allowed in {relative}: {attr}")
+            if attr_name == "style":
+                validate_css(value, relative, attr)
 
 
 def main() -> None:
