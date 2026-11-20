@@ -22,9 +22,11 @@ jobs:
         with:
           python-version: "3.x"
       - name: Compile-check Python tools
-        run: python -m py_compile GTA5-GTA6-PS3-MOD/tools/validate_project.py GTA5-GTA6-PS3-MOD/tools/test_validate_project.py
+        run: python -m py_compile GTA5-GTA6-PS3-MOD/tools/validate_project.py GTA5-GTA6-PS3-MOD/tools/test_validate_project.py GTA5-GTA6-PS3-MOD/tools/validate_assets.py
       - name: Run regression tests
         working-directory: GTA5-GTA6-PS3-MOD/tools
         run: python -m unittest -v
       - name: Validate project manifest
         run: python GTA5-GTA6-PS3-MOD/tools/validate_project.py
+      - name: Validate original HUD SVG source
+        run: python GTA5-GTA6-PS3-MOD/tools/validate_assets.py
