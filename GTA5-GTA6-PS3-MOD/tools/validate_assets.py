@@ -68,7 +68,7 @@ def validate_svg(entry: dict) -> None:
                 fail(f"event handler attribute is not allowed in {relative}: {attr}")
             if attr_name in {"href", "src"} and value and not value.startswith("#"):
                 fail(f"non-local resource reference is not allowed in {relative}: {attr}")
-            if attr_name == "style" and (EXTERNAL_URL.search(value) or re.search(r"url\\s*\\(\\s*(?![#'\"])", value, re.IGNORECASE)):
+            if attr_name == "style" and (EXTERNAL_URL.search(value) or re.search(r"url\s*\(\s*(?![#'\"])", value, re.IGNORECASE)):
                 fail(f"external CSS resource is not allowed in {relative}: {attr}")
 
 
