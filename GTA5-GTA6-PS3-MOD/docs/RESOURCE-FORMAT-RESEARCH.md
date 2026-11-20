@@ -91,3 +91,23 @@ The PS3DEV/PSL1GHT toolchain is for building native PS3 homebrew executables and
 5. Only then can a matching RPF integration and PS3 hardware test be considered. Keep the original files and a rollback copy untouched.
 
 No such experiment has been run in this repository: no matching user resource dump has been supplied, and no PS3 hardware test has been performed. Therefore no CTD, GFX, RPF, or PKG is being claimed as built or working.
+
+## Additional public PS3 HUD evidence checked (2026-11-20)
+
+A second public reference, [Pre-Release HUD 1.1](https://www.gta5-mods.com/misc/pre-release-hud-ps3-1-12), provides concrete PS3 install paths for a limited HUD colour / Scaleform replacement:
+
+- `update.rpf/common/data/ui/hudcolor.dat`
+- `update.rpf/ps3/patch/data/cdimages/scaleform_generic.rpf` for the relevant `.gfx` files.
+
+Important limitations in the same publication and its discussion:
+
+- The downloadable PS3 build is explicitly version 1.12, not 1.27.
+- The author states that a PS3 1.27 version was not being made at that time.
+- The author also states the release had only been tested in RPCS3, while a commenter asks whether it is for emulation; therefore it is not evidence of successful real-console installation.
+- The documented files are a narrow HUD modification, not a complete replacement for pause, phone, map, title, loading, settings, or mission screens.
+
+The original [GTA V Console Texture Editor](https://github.com/SamuelCFW/GTA-V-Console-Texture-Editor) README separately lists PS3 support for `.ctd`, `.chm`, `.csf`, and unpacked `.gfx` / `.sys` resources, and warns that replacement textures must retain the original parameters. This supports using the tool as a format inspection/editing candidate, but does not establish that arbitrary new full-screen UI resources can be authored or that the user's installed update accepts them.
+
+### Decision for this project
+
+Do not copy the 1.12 HUD files into the planned 1.27 package. Do not use an RPCS3-only result as a real-PS3 compatibility claim. The sensible first target is a single small, reversible HUD element in the exact user's build; only after that works should the project expand to other screens. The user's willingness to perform the final console test can remove the requirement for the assistant to personally test hardware, but it cannot replace the need to produce a correctly formatted native resource and a reproducible install payload.
