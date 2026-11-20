@@ -1,20 +1,16 @@
-# Original HUD concept asset
+# Original interface concept assets
 
-- Source: `modern_hud_concept.svg`
-- Canvas: 1280 × 720
-- Format: SVG with transparent background
-- License: original project artwork; may be modified and redistributed with this project.
-- Intended role: visual design source for an offline single-player HUD refresh.
+All source assets are original project artwork, 1280×720 SVGs. They are editable design references, not game-ready PS3 textures.
+
+- `modern_hud_concept.svg` — driving HUD concept.
+- `modern_pause_menu.svg` — pause/menu concept.
+- `loading_screen.svg` — loading-screen concept.
+- `title_screen.svg` — title/start-screen concept.
+- `map_screen.svg` — schematic map-interface concept only; it is not the real San Andreas map, has no accurate streets/geography, and is not interactive.
+- `phone_ui.svg` — phone interface concept.
+- `settings_screen.svg` — settings interface concept.
 
 ## Integration status
+None of these files has been inserted into GTA V. They have not been converted into the exact texture/resource formats required by the target PS3 game build. No controller navigation, game data, real map, loading logic, or in-game event hooks are implemented.
 
-This is source artwork, not a game-ready PS3 texture. It has not been inserted into GTA V's archives and is not proof of compatibility with update 1.27. A later integration stage must establish the exact target texture format, dimensions, alpha behavior, compression, and in-game layout constraints before conversion or installation.
-
-The artwork deliberately uses generic original labels and shapes. It does not contain Rockstar or GTA VI assets.
-
-## Current source artwork
-
-- `modern_hud_concept.svg` — in-game HUD layout concept.
-- `modern_pause_menu.svg` — pause/map/settings layout concept.
-
-Both are original design assets with 1280×720 source canvases. Their presence in the repository does not mean they are installed in GTA V.
+Before integration, the project must verify the exact NPEB01283 game/update build, identify the permitted resource formats and dimensions, convert and validate each asset, and test the result on PS3 hardware. Do not distribute Rockstar game files, title updates, console keys, RAP/RIF files, or third-party copyrighted assets.
