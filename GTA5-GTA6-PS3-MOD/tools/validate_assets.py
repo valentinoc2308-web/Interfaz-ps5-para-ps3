@@ -5,11 +5,32 @@ import sys
 import xml.etree.ElementTree as ET
 
 ROOT = Path(__file__).resolve().parents[1]
-ASSET = ROOT / "assets" / "ui" / "modern_hud_concept.svg"
+ASSET_ROOT = ROOT / "assets"
+ASSET = ASSET_ROOT / "ui" / "modern_hud_concept.svg"
+ASSET_MANIFEST = ASSET_ROOT / "asset-manifest.json"
 SVG_NS = "{http://www.w3.org/2000/svg}"
 
 
 def main() -> None:
+    if not ASSET_MANIFEST.is_file():
+        raise SystemExit(f"ERROR: missing asset manifest: {ASSET_MANIFEST}")
+    try:
+        import json
+        registry = json.loads(ASSET_MANIFEST.read_text(encoding="utf-8"))
+    except (OSError, ValueError) as exc:
+        raise SystemExit(f"ERROR: invalid asset manifest: {exc}")
+    assets = registry.get("assets") if isinstance(registry, dict) else None
+    if not isinstance(assets, list) or len(assets) != 1:
+        raise SystemExit("ERROR: asset manifest must contain exactly one registered original asset.")
+    entry = assets[0]
+    if not isinstance(entry, dict) or entry.get("id") != "modern_hud_concept":
+        raise SystemExit("ERROR: HUD asset registry entry is missing or invalid.")
+    if entry.get("path") != "ui/modern_hud_concept.svg" or entry.get("format") != "svg":
+        raise SystemExit("ERROR: HUD asset path/format does not match the source file.")
+    if entry.get("license") != "Original project artwork":
+        raise SystemExit("ERROR: HUD asset must be identified as original project artwork.")
+    if entry.get("integration") != "source_only_not_in_game":
+        raise SystemExit("ERROR: unverified asset cannot be marked as integrated.")
     if not ASSET.is_file():
         raise SystemExit(f"ERROR: missing SVG asset: {ASSET}")
     try:
@@ -35,7 +56,7 @@ def main() -> None:
             if attr_name in {"href", "src"} and ("://" in value or value.startswith("data:")):
                 raise SystemExit(f"ERROR: external or embedded resource is not allowed: {attr}")
 
-    print("PASS: original HUD SVG is valid, 1280x720, and contains no active/external content.")
+    print("PASS: asset registry and original HUD SVG are valid, 1280x720, and contain no active/external content.")
     print("NOTE: SVG is source artwork only; it is not a PS3-native texture or installed game mod.")
 
 
