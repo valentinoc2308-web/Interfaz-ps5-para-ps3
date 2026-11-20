@@ -12,7 +12,9 @@ This is an original, compatibility-focused conversion project. It aims to bring 
 - Machine-readable target and module manifest: [mod/manifest.json](mod/manifest.json).
 - Payload validator with path-safety and SHA-256 checks: [tools/validate_project.py](tools/validate_project.py).
 - Regression tests: [tools/test_validate_project.py](tools/test_validate_project.py).
-- Automated Python checks: [.github/workflows/gta5-ps3-mod-checks.yml](../../.github/workflows/gta5-ps3-mod-checks.yml).
+- Original HUD source artwork: [assets/ui/modern_hud_concept.svg](assets/ui/modern_hud_concept.svg).
+- SVG validation and PNG preview build: [tools/validate_assets.py](tools/validate_assets.py), [tools/build_hud_preview.py](tools/build_hud_preview.py).
+- Automated Python checks and HUD preview artifact: [.github/workflows/gta5-ps3-mod-checks.yml](../../.github/workflows/gta5-ps3-mod-checks.yml).
 - Implementation record: [docs/IMPLEMENTATION-STATUS.md](docs/IMPLEMENTATION-STATUS.md).
 
 The validator checks project files only. It does not modify GTA V, prove game compatibility, or build a PKG.
