@@ -84,6 +84,54 @@
       "integration": "source_only_not_in_game",
       "target_update": "1.27",
       "target_status": "unverified"
+    },
+    {
+      "id": "mission_briefing",
+      "path": "ui/mission_briefing.svg",
+      "format": "svg",
+      "width": 1280,
+      "height": 720,
+      "alpha": false,
+      "license": "Original project artwork",
+      "integration": "source_only_not_in_game",
+      "target_update": "1.27",
+      "target_status": "unverified"
+    },
+    {
+      "id": "vehicle_gallery",
+      "path": "ui/vehicle_gallery.svg",
+      "format": "svg",
+      "width": 1280,
+      "height": 720,
+      "alpha": false,
+      "license": "Original project artwork",
+      "integration": "source_only_not_in_game",
+      "target_update": "1.27",
+      "target_status": "unverified"
+    },
+    {
+      "id": "save_load_screen",
+      "path": "ui/save_load_screen.svg",
+      "format": "svg",
+      "width": 1280,
+      "height": 720,
+      "alpha": false,
+      "license": "Original project artwork",
+      "integration": "source_only_not_in_game",
+      "target_update": "1.27",
+      "target_status": "unverified"
+    },
+    {
+      "id": "notification_cards",
+      "path": "ui/notification_cards.svg",
+      "format": "svg",
+      "width": 1280,
+      "height": 720,
+      "alpha": false,
+      "license": "Original project artwork",
+      "integration": "source_only_not_in_game",
+      "target_update": "1.27",
+      "target_status": "unverified"
     }
   ]
 }
