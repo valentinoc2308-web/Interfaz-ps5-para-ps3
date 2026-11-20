@@ -11,7 +11,7 @@ GTA V digital Europe, title ID NPEB01283, planned update 1.27, PS3 HEN.
 - Twelve original 1280×720 SVG interface concepts: driving HUD, pause menu, loading screen, title screen, schematic map, phone, settings, mission briefing, vehicle gallery, save/load, notification cards, and controller interaction prompts.
 - All twelve SVG assets are registered as source-only artwork. None is integrated into GTA V, and compatibility with update 1.27 remains unverified.
 - The preview renderer reads the asset registry and generates a PNG preview for every registered SVG. These previews are review artifacts only, not PS3 game textures.
-- Added a read-only resource inventory utility with regression tests and a Spanish preparation guide. It can list candidate files and hash them, but cannot inspect nested RPF archives or establish the game update version.
+- Added a read-only resource inventory utility with regression tests and a Spanish preparation guide. It can list candidate files and hash them, but cannot inspect nested RPF archives or establish the game update version.\n- Added regression tests for the fail-closed PKG release gate, including empty payload, wrong title ID, unverified hardware test, prohibited retail archive, symlink, and missing Makefile target cases.\n- Added a CTD write-safety assessment documenting why PS3 texture-dictionary rebuilding remains blocked until a validated writer, round-trip fixture, and real hardware test exist. See [CTD-WRITE-SAFETY.md](CTD-WRITE-SAFETY.md).
 
 ## What the screens mean
 The map SVG is a schematic interface mockup. It is not a recreation of the real San Andreas map, contains no game geography, and is not navigable. The loading, title, phone, settings, briefing, gallery, save/load, notification, interaction-prompt, HUD, and pause-menu SVGs are static concept artwork; they do not respond to controller input or load live game data.
@@ -26,7 +26,7 @@ The map SVG is a schematic interface mockup. It is not a recreation of the real 
 7. Run automated validation and test installation, boot, menus, map, loading, and gameplay on actual PS3 HEN hardware.
 
 ## Explicitly not completed
-No game archive has been patched. No native PS3 UI resource has been built. No actual San Andreas map replacement exists. No installer or PKG exists. No compatibility or hardware test has passed. The GitHub Actions workflow is configured in the repository, but its execution result has not been verified here.
+No game archive has been patched. No native PS3 UI resource has been built. No actual San Andreas map replacement exists. No installer or PKG exists. No compatibility or hardware test has passed. The GitHub Actions workflow is configured to compile-check the new PKG gate and its regression tests, but its execution result has not been verified here.
 
 ## Release gate
 Do not label the project playable, installable, compatible, or complete until the exact target build is verified, all payload resources pass validation, and the package is tested on real PS3 hardware. The current repository is an artwork/tooling prototype, not the finished mod.
