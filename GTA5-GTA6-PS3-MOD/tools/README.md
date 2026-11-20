@@ -33,3 +33,14 @@ Any future integration tool must:
 - never bundle copyrighted Rockstar game data or license files.
 
 A PKG must not be advertised as installable until it has been built and tested on a PS3 HEN console with the target game.
+
+- `inventory_game_resources.py`: read-only inventory of already-extracted user-owned game/update folders. Lists candidate RPF, CTD, GFX and HUD-colour files with sizes and optional SHA-256; never reads archive contents or changes files.
+- `test_inventory_game_resources.py`: regression tests for candidate discovery and hash options.
+
+To inventory an extracted copy (from this directory):
+
+```sh
+python inventory_game_resources.py /path/to/your/extracted/update -o resource-inventory.json
+```
+
+The report contains metadata only. A filename/hash does not prove title ID or update compatibility. Do not upload or publish game archives; if asking for help, share only the JSON metadata report.
