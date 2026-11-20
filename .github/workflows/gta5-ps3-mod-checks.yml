@@ -34,10 +34,14 @@ jobs:
         run: python GTA5-GTA6-PS3-MOD/tools/validate_assets.py
       - name: Render all registered interface previews
         run: python GTA5-GTA6-PS3-MOD/tools/build_hud_preview.py
-      - name: Export RGBA8 texture-source buffers\n        run: python GTA5-GTA6-PS3-MOD/tools/export_texture_sources.py\n      - name: Upload interface preview artifact
+      - name: Export RGBA8 texture-source buffers
+        run: python GTA5-GTA6-PS3-MOD/tools/export_texture_sources.py
+      - name: Upload interface preview artifact
         uses: actions/upload-artifact@v4
         with:
           name: gta5-ps3-interface-previews
-          path: |\n            GTA5-GTA6-PS3-MOD/build/*.png\n            GTA5-GTA6-PS3-MOD/build/texture-source/**
+          path: |
+            GTA5-GTA6-PS3-MOD/build/*.png
+            GTA5-GTA6-PS3-MOD/build/texture-source/**
           if-no-files-found: error
           retention-days: 14
