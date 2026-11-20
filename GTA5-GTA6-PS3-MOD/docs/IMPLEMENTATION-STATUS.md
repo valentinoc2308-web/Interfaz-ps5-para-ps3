@@ -1,29 +1,25 @@
-# Implementation status
-
 ## Project target
 GTA V digital Europe, title ID NPEB01283, planned update 1.27, PS3 HEN.
 
-## Initial implementation committed
-- Added a machine-readable project manifest describing the offline, cosmetic-only scope.
-- Added a Python validation tool for manifest structure, safe payload paths, distribution policy, and SHA-256 integrity.
-- Added an original 1280×720 transparent HUD concept as editable SVG source artwork.
-- Added SVG safety/dimension validation and a reproducible CairoSVG PNG preview build.
-- Added GitHub Actions checks that run the Python tests, validate the manifest and SVG, and publish the HUD preview as a workflow artifact.
-- Added explicit release gates so an unverified game build cannot be described as compatible.
+## Artwork and tooling committed
+- Project manifest, asset manifest, path/hash/policy validators, regression tests, preview renderer, and GitHub Actions workflow definition.
+- Original 1280×720 SVG concepts: driving HUD, pause menu, loading screen, title screen, schematic map interface, phone interface, and settings screen.
+- All seven SVG assets are registered in `assets/asset-manifest.json` as source-only, not integrated, with update 1.27 compatibility unverified.
 
-## Planned content modules
-1. Visual atmosphere: original/licensed time-of-day and environment presentation assets.
-2. Vehicle appearance: original/licensed cosmetic assets, with PS3 memory budgets.
-3. Interface: offline interface presentation improvements.
-4. World details: small, performance-conscious original assets.
+## What the new screens mean
+The map SVG is only a schematic interface mockup. It is not a recreation of the real San Andreas map, does not contain game geography, and is not navigable. The loading/title/phone/settings SVGs are also static concept artwork; they do not yet respond to controller input or load game data.
 
-## Excluded from this project
-- Rockstar game files, original executables, title updates, console keys, RAP/RIF files, or complete game data.
-- Unlicensed third-party models, textures, audio, or maps.
-- Online recovery, cheating, anti-ban claims, or features that affect other players.
+## Still required for a complete cosmetic mod
+1. Confirm the installed GTA V build and exact update 1.27 state for NPEB01283.
+2. Determine and validate the actual PS3-compatible texture/UI resource formats and archive layout for that exact build.
+3. Convert approved original artwork into correctly sized and encoded resources.
+4. Implement the real in-game map/minimap presentation using permitted, original assets; a static mockup is not enough.
+5. Integrate each screen into the correct game UI resources while preserving a rollback copy.
+6. Build a distributable package containing only original mod files and a safe installer/manifest; never bundle the game, title update, keys, RAP/RIF, or copyrighted Rockstar assets.
+7. Run automated validation and test installation, boot, menus, map, loading, and gameplay on actual PS3 HEN hardware.
 
-## Build status
-This is an early source/tooling and artwork implementation, not a playable mod. The HUD is original source artwork and a preview only; it is not converted to a PS3-native texture or integrated into the game. No game archive has been patched, no PS3 binary has been compiled, and no PKG has been built or tested.
+## Explicitly not completed
+No game archive has been patched. No native PS3 UI resource has been built. No actual San Andreas map replacement exists. No installer or PKG exists. No compatibility or hardware test has passed. The GitHub Actions workflow is configured in the repository, but its execution result has not been verified here.
 
-## Release gates
-A release cannot be marked installable until the exact 1.27 installation is verified, every payload asset is licensed and hashed, the platform-specific packaging process is independently validated, and the result is tested on real PS3 hardware. The project must preserve a clean rollback path.
+## Release gate
+Do not label the project playable, installable, compatible, or complete until the exact target build is verified, all payload resources pass validation, and the package is tested on real PS3 hardware. The current repository is an artwork/tooling prototype, not the finished mod.
