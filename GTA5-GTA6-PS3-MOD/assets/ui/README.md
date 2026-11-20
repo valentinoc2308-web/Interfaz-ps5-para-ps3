@@ -9,6 +9,10 @@ All source assets are original project artwork, 1280×720 SVGs. They are editabl
 - `map_screen.svg` — schematic map-interface concept only; it is not the real San Andreas map, has no accurate streets/geography, and is not interactive.
 - `phone_ui.svg` — phone interface concept.
 - `settings_screen.svg` — settings interface concept.
+- `mission_briefing.svg` — mission briefing concept.
+- `vehicle_gallery.svg` — vehicle category/garage gallery concept.
+- `save_load_screen.svg` — save/load slot concept.
+- `notification_cards.svg` — objective, message, and point-of-interest notification concepts.
 
 ## Integration status
 None of these files has been inserted into GTA V. They have not been converted into the exact texture/resource formats required by the target PS3 game build. No controller navigation, game data, real map, loading logic, or in-game event hooks are implemented.
