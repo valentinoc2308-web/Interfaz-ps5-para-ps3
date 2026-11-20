@@ -20,14 +20,23 @@ class HudAssetTests(unittest.TestCase):
         self.assertEqual(root.attrib.get("height"), "720")
         self.assertEqual(root.attrib.get("viewBox"), "0 0 1280 720")
 
+    def test_pause_menu_svg_is_parseable_and_1280_by_720(self):
+        pause_svg = ROOT / "assets" / "ui" / "modern_pause_menu.svg"
+        root = ET.parse(pause_svg).getroot()
+        self.assertEqual(root.attrib.get("width"), "1280")
+        self.assertEqual(root.attrib.get("height"), "720")
+        self.assertEqual(root.attrib.get("viewBox"), "0 0 1280 720")
+
     def test_registry_declares_original_source_only_artwork(self):
         registry = json.loads(REGISTRY.read_text(encoding="utf-8"))
         self.assertEqual(registry["schema_version"], 1)
-        self.assertEqual(len(registry["assets"]), 1)
+        self.assertEqual(len(registry["assets"]), 2)
         asset = registry["assets"][0]
         self.assertEqual(asset["license"], "Original project artwork")
         self.assertEqual(asset["integration"], "source_only_not_in_game")
         self.assertEqual(asset["target_status"], "unverified")
+        self.assertEqual(registry["assets"][1]["id"], "modern_pause_menu")
+        self.assertEqual(registry["assets"][1]["integration"], "source_only_not_in_game")
 
     def test_asset_validator_passes(self):
         result = subprocess.run(
