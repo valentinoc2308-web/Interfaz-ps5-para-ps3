@@ -4,6 +4,7 @@ GTA V digital Europe, title ID NPEB01283, planned update 1.27, PS3 HEN.
 ## Artwork and tooling committed
 - Project manifest, asset manifest, path/hash/policy validators, regression tests, preview renderer, native integration/release gate specification, and GitHub Actions workflow definition.
 - SVG validator hardened to reject DTD/entity declarations, non-local resource references, external CSS URLs/imports, duplicate registry paths, and invalid/excessive dimensions.
+- CSS safety checks are centralized and regression-tested for local SVG fragments, external URL forms, and case-insensitive `@import` declarations.
 - Twelve original 1280×720 SVG interface concepts: driving HUD, pause menu, loading screen, title screen, schematic map, phone, settings, mission briefing, vehicle gallery, save/load, notification cards, and controller interaction prompts.
 - All twelve SVG assets are registered as source-only artwork. None is integrated into GTA V, and compatibility with update 1.27 remains unverified.
 - The preview renderer reads the asset registry and generates a PNG preview for every registered SVG. These previews are review artifacts only, not PS3 game textures.
