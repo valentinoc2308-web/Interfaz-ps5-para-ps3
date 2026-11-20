@@ -10,6 +10,8 @@ ASSET_ROOT = ROOT / "assets"
 ASSET_MANIFEST = ASSET_ROOT / "asset-manifest.json"
 SVG_NS = "{http://www.w3.org/2000/svg}"
 FORBIDDEN_ELEMENTS = {"script", "foreignobject", "iframe", "audio", "video"}
+MAX_DIMENSION = 8192
+EXTERNAL_URL = re.compile(r"(?:https?:|file:|ftp:|javascript:|data:)", re.IGNORECASE)
 
 
 def fail(message: str) -> None:
@@ -38,7 +40,10 @@ def validate_svg(entry: dict) -> None:
         fail(f"missing asset file: {relative}")
 
     try:
-        root = ET.parse(asset_path).getroot()
+        raw_svg = asset_path.read_bytes()
+        if b"<!DOCTYPE" in raw_svg.upper() or b"<!ENTITY" in raw_svg.upper():
+            fail(f"DOCTYPE/entity declarations are not allowed in {relative}")
+        root = ET.fromstring(raw_svg)
     except (ET.ParseError, OSError) as exc:
         fail(f"invalid SVG XML in {relative}: {exc}")
     if root.tag != f"{SVG_NS}svg":
@@ -46,6 +51,8 @@ def validate_svg(entry: dict) -> None:
 
     width = entry.get("width")
     height = entry.get("height")
+    if any(type(value) is not int or value < 1 or value > MAX_DIMENSION for value in (width, height)):
+        fail(f"invalid or excessive SVG dimensions in registry: {relative}")
     if root.attrib.get("width") != str(width) or root.attrib.get("height") != str(height):
         fail(f"SVG dimensions do not match registry: {relative}")
     if root.attrib.get("viewBox") != f"0 0 {width} {height}":
@@ -59,8 +66,10 @@ def validate_svg(entry: dict) -> None:
             attr_name = attr.rsplit("}", 1)[-1].lower()
             if attr_name.startswith("on"):
                 fail(f"event handler attribute is not allowed in {relative}: {attr}")
-            if attr_name in {"href", "src"} and ("://" in value or value.startswith("data:")):
-                fail(f"external or embedded resource is not allowed in {relative}: {attr}")
+            if attr_name in {"href", "src"} and value and not value.startswith("#"):
+                fail(f"non-local resource reference is not allowed in {relative}: {attr}")
+            if attr_name == "style" and (EXTERNAL_URL.search(value) or re.search(r"url\\s*\\(\\s*(?![#'\"])", value, re.IGNORECASE)):
+                fail(f"external CSS resource is not allowed in {relative}: {attr}")
 
 
 def main() -> None:
@@ -77,6 +86,7 @@ def main() -> None:
     if not isinstance(assets, list) or not assets:
         fail("asset manifest must contain at least one registered asset.")
     seen = set()
+    seen_paths = set()
     for entry in assets:
         if not isinstance(entry, dict):
             fail("every asset registry entry must be an object.")
@@ -84,6 +94,10 @@ def main() -> None:
         if not isinstance(asset_id, str) or not re.fullmatch(r"[a-z0-9_]+", asset_id) or asset_id in seen:
             fail(f"missing, unsafe, or duplicate asset id: {asset_id!r}")
         seen.add(asset_id)
+        asset_path = entry.get("path")
+        if not isinstance(asset_path, str) or asset_path in seen_paths:
+            fail(f"missing or duplicate asset path: {asset_path!r}")
+        seen_paths.add(asset_path)
         validate_svg(entry)
 
     print(f"PASS: {len(assets)} registered original SVG assets validated; no active/external content found.")
