@@ -2,9 +2,20 @@
 
 **Target:** Grand Theft Auto V, PS3, European digital release **NPEB01283**.  
 **Environment:** PS3 Super Slim + HEN.  
-**Status:** Project scaffold / research phase — **not an installable PKG yet**.
+**Planned game update:** **1.27** (not yet confirmed installed or tested).  
+**Status:** Early source/tooling implementation — **not a playable mod or installable PKG**.
 
 This is an original, compatibility-focused conversion project. It aims to bring selected *ideas and atmosphere* associated with a modern Vice City-era open-world game to GTA V on PS3, while respecting the PS3's memory, CPU, GPU, storage, and modding constraints.
+
+## Current implementation
+
+- Machine-readable target and module manifest: [mod/manifest.json](mod/manifest.json).
+- Payload validator with path-safety and SHA-256 checks: [tools/validate_project.py](tools/validate_project.py).
+- Regression tests: [tools/test_validate_project.py](tools/test_validate_project.py).
+- Automated Python checks: [.github/workflows/gta5-ps3-mod-checks.yml](../../.github/workflows/gta5-ps3-mod-checks.yml).
+- Implementation record: [docs/IMPLEMENTATION-STATUS.md](docs/IMPLEMENTATION-STATUS.md).
+
+The validator checks project files only. It does not modify GTA V, prove game compatibility, or build a PKG.
 
 ## Important limits
 
@@ -24,10 +35,10 @@ This is an original, compatibility-focused conversion project. It aims to bring 
 
 ## Compatibility policy
 
-The target title ID is NPEB01283. Region/title ID alone does not prove compatibility: the installed update/build and existing modifications must also be checked before any files are installed.
+The target title ID is NPEB01283 and the planned update is 1.27. Neither title ID nor a community archive label proves compatibility: the installed update/build and existing modifications must be checked before any files are installed.
 
 ## Safety / installation
 
 Never overwrite the original game without a verified backup. Do not install files made for another title ID or region. Do not use a package if its source or contents are unknown.
 
-See [roadmap](docs/ROADMAP.md), [compatibility notes](docs/COMPATIBILITY.md), and [asset policy](docs/ASSET-POLICY.md).
+See [roadmap](docs/ROADMAP.md), [compatibility notes](docs/COMPATIBILITY.md), [test plan](docs/TEST-PLAN-1.27.md), and [asset policy](docs/ASSET-POLICY.md).
