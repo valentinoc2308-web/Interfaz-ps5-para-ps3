@@ -44,6 +44,16 @@ class PayloadPathTests(unittest.TestCase):
             with self.subTest(name=name):
                 with self.assertRaises(SystemExit):
                     validator.safe_payload_path(self.root, name)
+    def test_rejects_symlink_inside_payload(self):
+        target = self.root / "real.bin"
+        target.write_bytes(b"original")
+        link = self.root / "linked.bin"
+        try:
+            link.symlink_to(target)
+        except (OSError, NotImplementedError):
+            self.skipTest("Symlinks are unavailable on this platform")
+        with self.assertRaises(SystemExit):
+            validator.safe_payload_path(self.root, "linked.bin")
 
 
 if __name__ == "__main__":
