@@ -63,7 +63,7 @@ class UiAssetTests(unittest.TestCase):
         self.assertEqual(self.registry["schema_version"], 1)
         ids = [entry["id"] for entry in self.registry["assets"]]
         self.assertEqual(len(ids), len(set(ids)))
-        self.assertIn("modern_hud", ids)
+        self.assertIn("modern_hud_concept", ids)
         self.assertIn("modern_pause_menu", ids)
         for entry in self.registry["assets"]:
             with self.subTest(asset=entry["id"]):
