@@ -1,13 +1,36 @@
 """NEXUS AI multi-provider gateway. Secrets stay server-side."""
-import json, os
+import json, os, time, hmac
+from collections import defaultdict, deque
 from typing import Literal
 import httpx
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Request
+from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field, field_validator
 
-app=FastAPI(title="NEXUS AI Multi-Model Cloud",version="0.9.0")
+app=FastAPI(title="NEXUS AI Multi-Model Cloud",version="0.10.0")
 app.add_middleware(CORSMiddleware,allow_origins=["*"],allow_methods=["*"],allow_headers=["*"])
+
+# API access gate and basic per-IP request throttling.
+_rate_buckets = defaultdict(deque)
+@app.middleware("http")
+async def protect_api(request: Request, call_next):
+    if request.url.path.startswith("/api/"):
+        expected = os.getenv("NEXUS_ACCESS_TOKEN", "").strip()
+        supplied = request.headers.get("authorization", "")
+        if not expected:
+            return JSONResponse(status_code=503, content={"detail":"El servidor no tiene configurado NEXUS_ACCESS_TOKEN."})
+        if not supplied.startswith("Bearer ") or not hmac.compare_digest(supplied[7:], expected):
+            return JSONResponse(status_code=401, content={"detail":"Token de acceso inválido o faltante."})
+        now = time.monotonic()
+        ip = request.client.host if request.client else "unknown"
+        bucket = _rate_buckets[ip]
+        while bucket and now - bucket[0] > 60:
+            bucket.popleft()
+        if len(bucket) >= 60:
+            return JSONResponse(status_code=429, content={"detail":"Límite temporal alcanzado. Probá de nuevo en un minuto."})
+        bucket.append(now)
+    return await call_next(request)
 
 DIRECTORY=[
 ("openai","OpenAI","openai"),("anthropic","Anthropic / Claude","anthropic"),("google","Google / Gemini","gemini"),
@@ -59,7 +82,7 @@ def configs():
     return [{"id":"default","name":"Proveedor principal","kind":"openai","base_url":b,"api_key":k,"models":[{"id":m}]}] if b and k and m else []
 
 @app.get("/")
-async def root(): return {"name":"NEXUS AI","status":"online","version":"0.9.0"}
+async def root(): return {"name":"NEXUS AI","status":"online","version":"0.10.0"}
 @app.get("/health")
 async def health(): return {"ok":True,"name":"NEXUS AI","version":"0.9.0","provider_configured":bool(configs()),"configured_provider_count":len(configs())}
 @app.get("/api/status")
