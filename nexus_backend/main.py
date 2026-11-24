@@ -64,6 +64,10 @@ async def root(): return {"name":"NEXUS AI","status":"online","version":"0.9.0"}
 async def health(): return {"ok":True,"name":"NEXUS AI","version":"0.9.0","provider_configured":bool(configs()),"configured_provider_count":len(configs())}
 @app.get("/api/status")
 async def status(): return {"online":True,"multi_provider":True,"configured_provider_count":len(configs()),"chat_provider_configured":bool(configs()),"execution_tools_enabled":False,"persistent_projects":False,"persistent_memory":False,"version":"0.9.0"}
+@app.get("/api/agents")
+async def agents():
+    return {"agents":[{"id":"architect","name":"Arquitecto"},{"id":"researcher","name":"Investigador"},{"id":"developer","name":"Programador"},{"id":"designer","name":"Diseñador"},{"id":"reviewer","name":"Revisor"},{"id":"tester","name":"Tester"}]}
+
 @app.get("/api/providers")
 @app.get("/api/models")
 async def providers():
